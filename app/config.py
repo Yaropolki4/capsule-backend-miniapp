@@ -7,6 +7,10 @@ class Settings(BaseSettings):
     open_router_key: str
     s3_access_key_id: str
     s3_secret_access_key_id: str
+    s3_endpoint: str = "https://storage.yandexcloud.net"
+    s3_bucket: str = "capsule-test"
+    s3_region: str = "ru-central1"
+    s3_public_url: str | None = None
     miniapp_url: str | None = None
     environment: str = "development"
 

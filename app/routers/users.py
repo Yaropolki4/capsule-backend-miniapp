@@ -57,12 +57,6 @@ async def upload_photo(
     db: AsyncSession = Depends(get_db),
 ):
     data = await file.read()
-    url = await upload_bytes(
-        data,
-        file.content_type or "image/jpeg",
-        settings.s3_access_key_id,
-        settings.s3_secret_access_key_id,
-        prefix="user-photos",
-    )
+    url = await upload_bytes(data, file.content_type or "image/jpeg", prefix="user-photos")
     user = await add_user_photo(db, user, url)
     return {"ok": True, "url": url, "photos": user.photos}

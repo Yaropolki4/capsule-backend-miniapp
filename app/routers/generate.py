@@ -73,23 +73,13 @@ async def try_on(
             )
             photo_bytes = photo_resp.content
 
-        user_photo_url = await upload_bytes(
-            photo_bytes,
-            "image/jpeg",
-            settings.s3_access_key_id,
-            settings.s3_secret_access_key_id,
-        )
+        user_photo_url = await upload_bytes(photo_bytes, "image/jpeg")
 
     result_bytes = await generate_try_on(user_photo_url, body.item_image_url, settings.open_router_key, body.generation_prompt)
     if not result_bytes:
         raise HTTPException(status_code=502, detail="Image generation failed")
 
-    generated_url = await upload_bytes(
-        result_bytes,
-        "image/jpeg",
-        settings.s3_access_key_id,
-        settings.s3_secret_access_key_id,
-    )
+    generated_url = await upload_bytes(result_bytes, "image/jpeg")
 
     await use_generation(db, user.id)
 

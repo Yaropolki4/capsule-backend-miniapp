@@ -115,12 +115,7 @@ async def _run_start_generation(bot: Bot, telegram_id: int, user_id: int) -> Non
             )
             return
 
-        generated_url = await upload_bytes(
-            result_bytes,
-            "image/jpeg",
-            settings.s3_access_key_id,
-            settings.s3_secret_access_key_id,
-        )
+        generated_url = await upload_bytes(result_bytes, "image/jpeg")
 
         async with AsyncSessionFactory() as db:
             await use_generation(db, user_id)
@@ -175,9 +170,4 @@ async def _get_profile_photo_url(bot: Bot, telegram_id: int) -> str | None:
         resp = await client.get(file_url)
         photo_bytes = resp.content
 
-    return await upload_bytes(
-        photo_bytes,
-        "image/jpeg",
-        settings.s3_access_key_id,
-        settings.s3_secret_access_key_id,
-    )
+    return await upload_bytes(photo_bytes, "image/jpeg")

@@ -4,29 +4,27 @@ import uuid
 import boto3
 from botocore.config import Config
 
-S3_BUCKET = "capsule-test"
-S3_ENDPOINT = "https://storage.yandexcloud.net"
-S3_REGION = "ru-central1"
+from app.config import settings
 
 
-def _get_client(access_key: str, secret_key: str):
+def _get_client():
     return boto3.client(
         "s3",
-        region_name=S3_REGION,
-        endpoint_url=S3_ENDPOINT,
-        aws_access_key_id=access_key,
-        aws_secret_access_key=secret_key,
+        region_name=settings.s3_region,
+        endpoint_url=settings.s3_endpoint,
+        aws_access_key_id=settings.s3_access_key_id,
+        aws_secret_access_key=settings.s3_secret_access_key_id,
         config=Config(signature_version="s3v4"),
     )
 
 
-async def upload_bytes(data: bytes, content_type: str, access_key: str, secret_key: str, prefix: str = "generated") -> str:
+async def upload_bytes(data: bytes, content_type: str, prefix: str = "generated") -> str:
     key = f"{prefix}/{uuid.uuid4()}.jpg"
 
     def _upload():
-        client = _get_client(access_key, secret_key)
+        client = _get_client()
         client.put_object(
-            Bucket=S3_BUCKET,
+            Bucket=settings.s3_bucket,
             Key=key,
             Body=data,
             ContentType=content_type,
@@ -34,4 +32,6 @@ async def upload_bytes(data: bytes, content_type: str, access_key: str, secret_k
         )
 
     await asyncio.to_thread(_upload)
-    return f"{S3_ENDPOINT}/{S3_BUCKET}/{key}"
+
+    base_url = settings.s3_public_url or f"{settings.s3_endpoint}/{settings.s3_bucket}"
+    return f"{base_url}/{key}"
