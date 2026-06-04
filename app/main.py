@@ -1,10 +1,13 @@
 import asyncio
 import contextlib
+import logging
 from contextlib import asynccontextmanager
 
 from aiogram import Bot, Dispatcher
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+logger = logging.getLogger(__name__)
 
 from app.bot.handlers import payment as payment_handler
 from app.bot.handlers import start as start_handler
@@ -42,6 +45,8 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 origins = ["*"] if settings.environment == "development" else [settings.miniapp_url]
+
+logger.warning("CORS origins: %s | environment: %s", origins, settings.environment)
 
 app.add_middleware(
     CORSMiddleware,
