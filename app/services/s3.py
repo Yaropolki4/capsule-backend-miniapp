@@ -1,6 +1,5 @@
 import asyncio
 import uuid
-from io import BytesIO
 
 import boto3
 from botocore.config import Config
@@ -29,8 +28,9 @@ async def upload_bytes(data: bytes, content_type: str, access_key: str, secret_k
         client.put_object(
             Bucket=S3_BUCKET,
             Key=key,
-            Body=BytesIO(data),
+            Body=data,
             ContentType=content_type,
+            ContentLength=len(data),
         )
 
     await asyncio.to_thread(_upload)
