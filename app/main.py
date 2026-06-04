@@ -4,8 +4,7 @@ from contextlib import asynccontextmanager
 
 from aiogram import Bot, Dispatcher
 from fastapi import FastAPI
-from starlette.requests import Request
-from starlette.responses import Response
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.bot.handlers import payment as payment_handler
 from app.bot.handlers import start as start_handler
@@ -42,12 +41,15 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+origins = ["*"] if settings.environment == "development" else [settings.miniapp_url]
 
-@app.options("/{path:path}")
-async def options_handler(request: Request) -> Response:
-    requested_headers = request.headers.get("access-control-request-headers", "")
-    headers = {"Access-Control-Allow-Headers": requested_headers} if requested_headers else {}
-    return Response(status_code=200, headers=headers)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 
 app.include_router(auth.router)
