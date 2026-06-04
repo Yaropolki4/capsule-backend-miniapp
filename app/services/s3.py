@@ -31,7 +31,6 @@ async def upload_bytes(data: bytes, content_type: str, access_key: str, secret_k
             Key=key,
             Body=BytesIO(data),
             ContentType=content_type,
-            ACL="public-read",
         )
 
     await asyncio.to_thread(_upload)
