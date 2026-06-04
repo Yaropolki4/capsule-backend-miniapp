@@ -44,7 +44,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-origins = ["*"] if settings.environment == "development" else [settings.miniapp_url]
+origins = ["*"] if settings.environment == "development" else [settings.miniapp_url.rstrip("/")]
 
 logger.warning("CORS origins: %s | environment: %s", origins, settings.environment)
 
