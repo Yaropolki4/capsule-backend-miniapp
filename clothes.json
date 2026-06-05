@@ -86,5 +86,189 @@
     "link": "https://www.wildberries.ru/catalog/820208407/detail.aspx",
     "image": "https://basket-37.wbbasket.ru/vol8202/part820208/820208407/images/hq/2.webp",
     "generation_prompt": "Худи должен быть оверсайз в плечах (плечи человека визуально больше), но при этом быть УКОРОЧЕНЫМ, длина по талию или даже чуть меньше. Рукова широкие, зоны подмышек тоже не облегает, она большая."
+  },
+  {
+    "id": 12,
+    "title": "Лонгслив оверсайз с двойным рукавом",
+    "tags": "Лонгслив черный унисекс Оверсайз с белыми рукавами",
+    "link": "https://www.wildberries.ru/catalog/543939671/detail.aspx?targetUrl=MI",
+    "image": "https://basket-28.wbbasket.ru/vol5439/part543939/543939668/images/hq/1.webp",
+    "generation_prompt": "Оверсайз лонгслив с длинными лукавами, немного ниже талии"
+  },
+  {
+    "id": 13,
+    "title": "Лонгслив оверсайз с двойным рукавом",
+    "tags": "Лонгслив песочный унисекс Оверсайз с белыми рукавами",
+    "link": "https://www.wildberries.ru/catalog/543939671/detail.aspx?targetUrl=MI",
+    "image": "https://basket-28.wbbasket.ru/vol5439/part543939/543939668/images/hq/1.webp",
+    "generation_prompt": "Оверсайз лонгслив с длинными лукавами, немного ниже талии"
+  },
+  {
+    "id": 14,
+    "title": "Лонгслив джерси оверсайз с принтом синий в полоску",
+    "tags": "Лонгслив джерси, футбольная тематика, оверсайз",
+    "link": "https://www.wildberries.ru/catalog/1011302912/detail.aspx?targetUrl=MI",
+    "image": "https://basket-41.wbbasket.ru/vol10113/part1011302/1011302912/images/hq/1.webp",
+    "generation_prompt": "Оверсайз лонгслив с длинными лукавами, немного ниже талии"
+  },
+  {
+    "id": 15,
+    "title": "Шорты багги летние облегченные хлопок",
+    "tags": "Шорты багги, длинные ниже колена, широкие, коричневые",
+    "link": "https://basket-41.wbbasket.ru/vol10008/part1000887/1000887076/images/big/2.webp",
+    "image": "https://basket-28.wbbasket.ru/vol5439/part543939/543939668/images/hq/1.webp",
+    "generation_prompt": "Должны сидеть широко, шорты гораздо ниже колен"
+  },
+  {
+    "id": 16,
+    "title": "Лонгслив оверсайз с принтом",
+    "tags": "Лонгслив серый с ярким бело-розовым принтом",
+    "link": "https://www.wildberries.ru/catalog/235887087/detail.aspx?targetUrl=MI",
+    "image": "https://basket-15.wbbasket.ru/vol2358/part235887/235887087/images/hq/1.webp",
+    "generation_prompt": "Оверсайз лонгслив с длинными лукавами, немного ниже талии"
+  },
+  {
+    "id": 17,
+    "title": "Лонгслив оверсайз с принтом",
+    "tags": "Лонгслив белый с ярким черным принтом",
+    "link": "https://www.wildberries.ru/catalog/235887087/detail.aspx?targetUrl=MI",
+    "image": "https://basket-14.wbbasket.ru/vol2138/part213865/213865619/images/hq/1.webp",
+    "generation_prompt": "Оверсайз лонгслив с длинными лукавами, немного ниже талии"
+  },
+  {
+    "id": 18,
+    "title": "Джерси оверсайз с принтом",
+    "tags": "Лонгслив черный в полоску унисекс",
+    "link": "https://www.wildberries.ru/catalog/423508469/detail.aspx?targetUrl=MI",
+    "image": "https://basket-24.wbbasket.ru/vol4235/part423508/423508469/images/hq/1.webp",
+    "generation_prompt": "Оверсайз лонгслив с длинными лукавами, немного ниже талии"
+  },
+  {
+    "id": 19,
+    "title": "Джерси оверсайз с принтом",
+    "tags": "Лонгслив белый в розовую полоску унисекс",
+    "link": "https://www.wildberries.ru/catalog/423508469/detail.aspx?targetUrl=MI",
+    "image": "https://basket-24.wbbasket.ru/vol4235/part423508/423508473/images/hq/1.webp",
+    "generation_prompt": "Оверсайз лонгслив с длинными лукавами, немного ниже талии"
+  },
+  {
+    "id": 20,
+    "title": "Шорты широкие",
+    "tags": "Шорты широкие по колено, зеленые.",
+    "link": "https://www.wildberries.ru/catalog/215261033/detail.aspx",
+    "image": "https://basket-14.wbbasket.ru/vol2152/part215261/215261033/images/big/1.webp",
+    "generation_prompt": "Оверсайз шорты, по колено. Сидят широко."
+  },
+  {
+    "id": 21,
+    "title": "Шорты широкие",
+    "tags": "Шорты широкие по колено, белые.",
+    "link": "https://www.wildberries.ru/catalog/215261033/detail.aspx",
+    "image": "https://basket-14.wbbasket.ru/vol2156/part215668/215668257/images/big/1.webp",
+    "generation_prompt": "Оверсайз шорты, по колено. Сидят широко."
+  },
+  {
+    "id": 22,
+    "title": "Широкие брюки карго с карманами",
+    "tags": "Широкие темно-зеленые брюки",
+    "link": "https://www.wildberries.ru/catalog/454247558/detail.aspx",
+    "image": "https://basket-25.wbbasket.ru/vol4542/part454247/454247558/images/hq/1.webp",
+    "generation_prompt": "Штаны должны широко сидеть на ногах"
+  },
+  {
+    "id": 23,
+    "title": "Спортивные штаны джоггеры",
+    "tags": "Штаны спортивные черные не оверсайз монотонные",
+    "link": "https://www.wildberries.ru/catalog/208414490/detail.aspx",
+    "image": "https://basket-14.wbbasket.ru/vol2084/part208414/208414490/images/big/1.webp",
+    "generation_prompt": ""
+  },
+  {
+    "id": 24,
+    "title": "Спортивные штаны джоггеры",
+    "tags": "Штаны спортивные черные не оверсайз c полоской сбоку",
+    "link": "https://www.wildberries.ru/catalog/208414490/detail.aspx",
+    "image": "https://basket-16.wbbasket.ru/vol2621/part262151/262151061/images/big/3.webp",
+    "generation_prompt": ""
+  },
+  {
+    "id": 25,
+    "title": "штаны спортивные джоггеры",
+    "tags": "Серые спортивные оверсайз штаны с логотипом Nike   ",
+    "link": "https://www.wildberries.ru/catalog/480948681/detail.aspx",
+    "image": "https://basket-26.wbbasket.ru/vol4809/part480948/480948681/images/big/1.webp",
+    "generation_prompt": "Оверсайз лонгслив с длинными лукавами, немного ниже талии"
+  },
+  {
+    "id": 26,
+    "title": "Толстовка на молнии без капюшона и начеса",
+    "tags": "Толстовка на молнии не оверсайз черная",
+    "link": "https://www.wildberries.ru/catalog/213908138/detail.aspx",
+    "image": "https://basket-14.wbbasket.ru/vol2139/part213908/213908138/images/big/1.webp",
+    "generation_prompt": "Не оверсайз толстовка, немного обтягивает, чуть ниже талии"
+  },
+  {
+    "id": 27,
+    "title": "Летнее платье майка лапша повседневное",
+    "tags": "Платье обтягивающее черное. Длина по бедра, обтягивает бедра",
+    "link": "https://www.wildberries.ru/catalog/206263012/detail.aspx",
+    "image": "https://basket-14.wbbasket.ru/vol2062/part206263/206263012/images/big/1.webp",
+    "generation_prompt": "Надень платье на пользователя, на девушку-модель не обращай внимания, их фото тебе нужно вырезать только платье"
+  },
+  {
+    "id": 28,
+    "title": "Платье женское летнее приталенное на бретельках из хлопка",
+    "tags": "Черное длинное платье, не обтягивающее в ногах, большой вырез декальте",
+    "link": "https://www.wildberries.ru/catalog/317530522/detail.aspx",
+    "image": "https://basket-19.wbbasket.ru/vol3175/part317530/317530522/images/big/7.webp",
+    "generation_prompt": "Надень платье на пользователя, на девушку-модель не обращай внимания, их фото тебе нужно вырезать только платье"
+  },
+  {
+    "id": 29,
+    "title": "Платье праздничное кружевное",
+    "tags": "Платье белое кружевное обтягивающее по бедра",
+    "link": "https://www.wildberries.ru/catalog/390599597/detail.aspx",
+    "image": "https://basket-22.wbbasket.ru/vol3905/part390599/390599597/images/big/1.webp",
+    "generation_prompt": "Надень платье на пользователя, на девушку-модель не обращай внимания, их фото тебе нужно вырезать только платье"
+  },
+  {
+    "id": 30,
+    "title": "Трикотажное платье лапша вечернее летнее",
+    "tags": "Платье темно синее обтягивающее по бедра",
+    "link": "https://www.wildberries.ru/catalog/209713848/detail.aspx",
+    "image": "https://basket-14.wbbasket.ru/vol2097/part209713/209713848/images/big/1.webp",
+    "generation_prompt": "Надень платье на пользователя, на девушку-модель не обращай внимания, их фото тебе нужно вырезать только платье"
+  },
+  {
+    "id": 31,
+    "title": "Платье летнее короткое крестьянка легкое повседневное",
+    "tags": "Платье необтягивающее по бедра, белое с узорами",
+    "link": "https://www.wildberries.ru/catalog/409965475/detail.aspx",
+    "image": "https://basket-23.wbbasket.ru/vol4099/part409965/409965475/images/big/1.webp",
+    "generation_prompt": "Надень платье на пользователя, на девушку-модель не обращай внимания, их фото тебе нужно вырезать только платье"
+  },
+  {
+    "id": 32,
+    "title": "Юбка летняя повседневная",
+    "tags": "Юбка короткая рововая с белыми узорами",
+    "link": "https://www.wildberries.ru/catalog/316525366/detail.aspx",
+    "image": "https://basket-19.wbbasket.ru/vol3165/part316525/316525366/images/big/1.webp",
+    "generation_prompt": "Надень юбку на пользователя, на девушку-модель не обращай внимания, их фото тебе нужно вырезать только платье"
+  },
+  {
+    "id": 33,
+    "title": "Юбка шелковая летняя миди в горох атласная",
+    "tags": "Убка, коричневая в белый горошек",
+    "link": "https://www.wildberries.ru/catalog/993772960/detail.aspx",
+    "image": "https://basket-41.wbbasket.ru/vol9937/part993772/993772960/images/big/1.webp",
+    "generation_prompt": "Надень юбку на пользователя, на девушку-модель не обращай внимания, их фото тебе нужно вырезать только платье"
+  },
+  {
+    "id": 34,
+    "title": "Юбка кожаная с ремнем школьная и в офис",
+    "tags": "Юбка короткая кожаная черная",
+    "link": "https://www.wildberries.ru/catalog/282303413/detail.aspx",
+    "image": "https://basket-17.wbbasket.ru/vol2823/part282303/282303413/images/big/2.webp",
+    "generation_prompt": "Надень юбку на пользователя, на девушку-модель не обращай внимания, их фото тебе нужно вырезать только платье"
   }
 ]
