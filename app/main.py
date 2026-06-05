@@ -44,16 +44,14 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-origins = ["*"] if settings.environment == "development" else [settings.miniapp_url.rstrip("/")]
-
-logger.warning("CORS origins: %s | environment: %s", origins, settings.environment)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+if settings.environment != "development":
+    logger.warning("CORS origins: [%s] | environment: %s", settings.miniapp_url, settings.environment)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[settings.miniapp_url.rstrip("/")],
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 
 
