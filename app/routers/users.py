@@ -1,16 +1,33 @@
 import httpx
-from fastapi import APIRouter, Depends, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
-from app.crud.user import add_user_photo
+from app.crud.user import add_user_photo, set_user_gender
 from app.dependencies import get_current_user, get_db
 from app.models.user import User
+from app.schemas.user import UserOut
 from app.services.s3 import upload_bytes
 
 router = APIRouter(prefix="/users", tags=["users"])
 
 _TG_API = "https://api.telegram.org"
+
+
+class GenderIn(BaseModel):
+    gender: str
+
+
+@router.post("/gender", response_model=UserOut)
+async def update_gender(
+    body: GenderIn,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    if body.gender not in ("male", "female"):
+        raise HTTPException(status_code=400, detail="gender must be 'male' or 'female'")
+    return await set_user_gender(db, user, body.gender)
 
 
 @router.post("/photos")

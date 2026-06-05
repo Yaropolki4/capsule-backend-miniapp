@@ -17,3 +17,4 @@ class User(Base):
     generations_left: Mapped[int] = mapped_column(Integer, default=3, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), nullable=False)
     photos: Mapped[list | None] = mapped_column(JSONB, nullable=True)
+    gender: Mapped[str | None] = mapped_column(String(16), nullable=True)

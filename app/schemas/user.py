@@ -10,5 +10,6 @@ class UserOut(BaseModel):
     first_name: str | None
     generations_left: int
     created_at: datetime
+    gender: str | None
 
     model_config = {"from_attributes": True}

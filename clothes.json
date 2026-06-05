@@ -270,5 +270,157 @@
     "link": "https://www.wildberries.ru/catalog/282303413/detail.aspx",
     "image": "https://basket-17.wbbasket.ru/vol2823/part282303/282303413/images/big/2.webp",
     "generation_prompt": "Надень юбку на пользователя, на девушку-модель не обращай внимания, их фото тебе нужно вырезать только платье"
+  },
+  {
+    "id": 35,
+    "title": "ALURA store Платье мини вечернее с корсетом",
+    "tags": "Летнее вечернее мини платье пыльно-розового цвета укороченное",
+    "link": "https://www.wildberries.ru/catalog/776196916/detail.aspx",
+    "image": "https://basket-36.wbbasket.ru/vol7761/part776196/776196916/images/big/4.webp",
+    "generation_prompt": "Сидит приталенно женственно длина выше колен"
+  },
+  {
+    "id": 36,
+    "title": "SAY YES! Платье летнее с бахромой большие размеры",
+    "tags": "Платье вечернее повседневное длинное чёрное с бахромой",
+    "link": "https://www.wildberries.ru/catalog/165090711/detail.aspx",
+    "image": "https://basket-11.wbbasket.ru/vol1650/part165090/165090711/images/hq/1.webp",
+    "generation_prompt": "Сидит Оверсайз ниже колен длинное под любой образ. НАДЕНЬ ПЛАТЬЕ НА ПОЛЬЗОВАТЕЛЯ, на девушку модель не обращай внимания!!!"
+  },
+  {
+    "id": 37,
+    "title": "BULUT312 Платье праздничное в горошек вечернее",
+    "tags": "Платье ярко-синее в горошек летнее приталенное укороченное",
+    "link": "https://www.wildberries.ru/catalog/998262393/detail.aspx",
+    "image": "https://basket-41.wbbasket.ru/vol9982/part998262/998262393/images/big/3.webp",
+    "generation_prompt": "Сидит приталенная длина чуть выше колена. НАДЕНЬ ПЛАТЬЕ НА ПОЛЬЗОВАТЕЛЯ, на девушку модель не обращай внимания!!!"
+  },
+  {
+    "id": 38,
+    "title": "Sozakka store Мини платье с воланами и длинным рукавом",
+    "tags": "Платье обтягивающее бордового цвета с воланами и длинным рукавом",
+    "link": "https://www.wildberries.ru/catalog/961385778/detail.aspx",
+    "image": "https://basket-41.wbbasket.ru/vol9613/part961385/961385778/images/big/12.webp",
+    "generation_prompt": "Сидит обтягивающие длина короткая удлинённые рукава. НАДЕНЬ ПЛАТЬЕ НА ПОЛЬЗОВАТЕЛЯ, на девушку модель не обращай внимания!!!"
+  },
+  {
+    "id": 39,
+    "title": "YESFASHION Платье вечернее лапша с воротником в рубчик",
+    "tags": "Платье чёрное лапша удлиненная без рукавов с воротом в рубчик",
+    "link": "https://www.wildberries.ru/catalog/239966781/detail.aspx",
+    "image": "https://basket-15.wbbasket.ru/vol2399/part239966/239966781/images/big/1.webp",
+    "generation_prompt": "Сидит приталенно обтягивающие длина по щиколотку. НАДЕНЬ ПЛАТЬЕ НА ПОЛЬЗОВАТЕЛЯ, на девушку модель не обращай внимания!!!"
+  },
+  {
+    "id": 40,
+    "title": "Dressroom Платье коктейльное мини корсетное баллон",
+    "tags": "Платье вечернее корсетное баллон юбка шоколадного цвета",
+    "link": "https://www.wildberries.ru/catalog/814544352/detail.aspx",
+    "image": "https://basket-37.wbbasket.ru/vol8145/part814544/814544352/images/big/1.webp",
+    "generation_prompt": "Сидит приставлена объемная юбка баллон красиво облегает грудь. НАДЕНЬ ПЛАТЬЕ НА ПОЛЬЗОВАТЕЛЯ, на девушку модель не обращай внимания!!!"
+  },
+  {
+    "id": 41,
+    "title": "Allow TEO Платье ханьфу Лепестки лотоса",
+    "tags": "Платье красного цвета в китайском стиле кимоно выше колен на запах",
+    "link": "https://www.wildberries.ru/catalog/294875431/detail.aspx",
+    "image": "https://basket-18.wbbasket.ru/vol2948/part294875/294875431/images/big/1.webp",
+    "generation_prompt": "Длина чуть выше колен свободно сидит"
+  },
+  {
+    "id": 42,
+    "title": "NOVOCH Платье с длинным рукавом летнее",
+    "tags": "Платье длинное летнее белое в синий цветок с длинным объемным рукавом и женственным вырезом",
+    "link": "https://www.wildberries.ru/catalog/371789371/detail.aspx",
+    "image": "https://basket-22.wbbasket.ru/vol3717/part371789/371789371/images/big/1.webp",
+    "generation_prompt": "Сидит облегающие объемные рукава длина по щиколотку. НАДЕНЬ ПЛАТЬЕ НА ПОЛЬЗОВАТЕЛЯ, на девушку модель не обращай внимания!!!"
+  },
+  {
+    "id": 43,
+    "title": "Red Flag Футболка скимс облегающая с надписью",
+    "tags": "Футболка розового цвета женская облегающая с надписью Red Flag на груди блёстками",
+    "link": "https://www.wildberries.ru/catalog/708385454/detail.aspx",
+    "image": "https://basket-34.wbbasket.ru/vol7083/part708385/708385454/images/big/1.webp",
+    "generation_prompt": "Сидит обтягивающая не Оверсайз длина футболки по талию. НАДЕНЬ ФУТБОЛКУ НА ПОЛЬЗОВАТЕЛЯ, на девушку модель не обращай внимания!!!"
+  },
+  {
+    "id": 44,
+    "title": "Red Flag Футболка скимс облегающая с принтом",
+    "tags": "Футболка белого цвета женская облегающая с принтом на груди красная надпись и рисунок клубники",
+    "link": "https://www.wildberries.ru/catalog/861236128/detail.aspx",
+    "image": "https://basket-38.wbbasket.ru/vol8612/part861236/861236128/images/big/2.webp",
+    "generation_prompt": "Сидит облегающие не Оверсайз длина футболки по талию подчёркивает фигуру. НАДЕНЬ ФУТБОЛКУ НА ПОЛЬЗОВАТЕЛЯ, на девушку модель не обращай внимания!!!"
+  },
+  {
+    "id": 45,
+    "title": "Red Flag Футболка скимс облегающая с принтом",
+    "tags": "Футболка голубая женская облегающая с принтом синяя морская звезда на груди",
+    "link": "https://www.wildberries.ru/catalog/893151855/detail.aspx",
+    "image": "https://basket-39.wbbasket.ru/vol8931/part893151/893151855/images/big/1.webp",
+    "generation_prompt": "Сидит облегающая не Оверсайз длина футболки по талию подчёркивает фигуру. НАДЕНЬ ФУТБОЛКУ НА ПОЛЬЗОВАТЕЛЯ, на девушку модель не обращай внимания!!!"
+  },
+  {
+    "id": 46,
+    "title": "Red Flag Футболка скимс облегающая с надписью",
+    "tags": "Футболка скимс женская облегающая с надписью Red Flag на груди сливочный цвет",
+    "link": "https://www.wildberries.ru/catalog/893151854/detail.aspx",
+    "image": "https://basket-39.wbbasket.ru/vol8931/part893151/893151854/images/big/2.webp",
+    "generation_prompt": "Сидит облегающие не Оверсайз длина футболки по талию подчёркивает фигуру. НАДЕНЬ ФУТБОЛКУ НА ПОЛЬЗОВАТЕЛЯ, на девушку модель не обращай внимания!!!"
+  },
+  {
+    "id": 47,
+    "title": "Red Flag Футболка оверсайз с принтом и надписью",
+    "tags": "Футболка белая Оверсайз с ярким принтом папайя на груди удлинённая",
+    "link": "https://www.wildberries.ru/catalog/926883260/detail.aspx",
+    "image": "https://basket-40.wbbasket.ru/vol9268/part926883/926883260/images/big/1.webp",
+    "generation_prompt": "Сидит как Оверсайз удлиненная с рукавом до локтя. НАДЕНЬ ФУТБОЛКУ НА ПОЛЬЗОВАТЕЛЯ, на девушку модель не обращай внимания!!!"
+  },
+  {
+    "id": 48,
+    "title": "Red Flag Футболка оверсайз с надписью с принтом",
+    "tags": "Футболка Оверсайз коричневого цвета с минималистичным принтом и надписью на груди",
+    "link": "https://www.wildberries.ru/catalog/788630671/detail.aspx",
+    "image": "",
+    "generation_prompt": "Сидит как Оверсайз удлиненная с рукавом до локтя. НАДЕНЬ ФУТБОЛКУ НА ПОЛЬЗОВАТЕЛЯ, на девушку модель не обращай внимания!!!"
+  },
+  {
+    "id": 49,
+    "title": "Red Flag Футболка оверсайз с надписью с принтом",
+    "tags": "Футболка Оверсайз серого цвета с минималистичным принтом и надписью на груди",
+    "link": "https://www.wildberries.ru/catalog/878988388/detail.aspx",
+    "image": "https://basket-36.wbbasket.ru/vol7886/part788630/788630671/images/big/8.webp",
+    "generation_prompt": "Сидит как Оверсайз удлиненная с рукавом до локтя. НАДЕНЬ ФУТБОЛКУ НА ПОЛЬЗОВАТЕЛЯ, на девушку модель не обращай внимания!!!"
+  },
+  {
+    "id": 50,
+    "title": "HEDY LOVE Юбка шорты мини короткая",
+    "tags": "Юбка шорты чёрного цвета мини короткая",
+    "link": "https://www.wildberries.ru/catalog/99714618/detail.aspx",
+    "image": "https://basket-05.wbbasket.ru/vol997/part99714/99714618/images/big/6.webp",
+    "generation_prompt": "Сидит как мини очень короткая это юбка шорты. НАДЕНЬ ЮБКУ НА ПОЛЬЗОВАТЕЛЯ, на девушку модель не обращай внимания!!!"
+  },
+  {
+    "id": 51,
+    "title": "BonnyClub Юбка шорты с воланами мини летняя",
+    "tags": "Юбка шорты белого цвета с воланами мини летняя",
+    "link": "https://www.wildberries.ru/catalog/348713723/detail.aspx",
+    "image": "https://basket-21.wbbasket.ru/vol3487/part348713/348713723/images/big/3.webp",
+    "generation_prompt": "Сидит как юбка мини довольно свободно и широко. НАДЕНЬ ЮБКУ НА ПОЛЬЗОВАТЕЛЯ, на девушку модель не обращай внимания!!!"
+  },
+  {
+    "id": 52,
+    "title": "KARYLINE Юбка атласная макси длинная",
+    "tags": "Атласная юбка молочного цвета длинная макси",
+    "link": "https://www.wildberries.ru/catalog/240394906/detail.aspx",
+    "image": "https://basket-15.wbbasket.ru/vol2403/part240394/240394906/images/big/5.webp",
+    "generation_prompt": "Сидит приталенно подчёркивая фигуру. НАДЕНЬ ЮБКУ НА ПОЛЬЗОВАТЕЛЯ, на девушку модель не обращай внимания!!!"
+  },
+  {
+    "id": 53,
+    "title": "KARYLINE Юбка атласная макси длинная",
+    "tags": "Юбка атласная шоколадного цвета макси длинная",
+    "link": "https://www.wildberries.ru/catalog/171866620/detail.aspx",
+    "image": "https://basket-12.wbbasket.ru/vol1718/part171866/171866620/images/big/1.webp",
+    "generation_prompt": "Сидит приталенно но при этом свободно длинная. НАДЕНЬ ЮБКУ НА ПОЛЬЗОВАТЕЛЯ, на девушку модель не обращай внимания!!!"
   }
 ]

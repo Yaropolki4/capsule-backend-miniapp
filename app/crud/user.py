@@ -40,6 +40,13 @@ async def use_generation(db: AsyncSession, user_id: int) -> bool:
     return True
 
 
+async def set_user_gender(db: AsyncSession, user: User, gender: str) -> User:
+    user.gender = gender
+    await db.commit()
+    await db.refresh(user)
+    return user
+
+
 async def add_generations(db: AsyncSession, telegram_id: int, amount: int) -> User | None:
     user = await get_user_by_telegram_id(db, telegram_id)
     if not user:

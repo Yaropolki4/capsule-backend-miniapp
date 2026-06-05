@@ -86,12 +86,13 @@ async def websocket_endpoint(websocket: WebSocket, init_data: str):
                         content=msg.body.payload,
                         content_type=msg.body.type,
                     )
-                await _stream_ai(websocket, user.id)
+                await _stream_ai(websocket, user.id, gender=fresh_user.gender)
 
             elif event == "cancel_recommendation":
                 await _stream_ai(
                     websocket,
                     user.id,
+                    gender=user.gender,
                     synthetic_user_msg="Эта вещь не подошла, предложи другой вариант",
                 )
 
@@ -102,13 +103,14 @@ async def websocket_endpoint(websocket: WebSocket, init_data: str):
 async def _stream_ai(
     websocket: WebSocket,
     user_id: int,
+    gender: str | None = None,
     synthetic_user_msg: str | None = None,
 ) -> None:
     async with AsyncSessionFactory() as db:
         recent = await get_recent_messages(db, user_id, limit=5)
 
     history = (
-        [{"role": "system", "content": build_system_prompt()}]
+        [{"role": "system", "content": build_system_prompt(gender=gender)}]
         + _build_history(recent)
     )
     if synthetic_user_msg:
