@@ -19,13 +19,19 @@ TARIFFS = {
         "title": "СТАРТЕР",
         "description": "5 образов от AI-стилиста",
         "generations": 5,
-        "stars": 25,
+        "stars": 30,
     },
     "stylist": {
         "title": "СТИЛИСТ",
         "description": "50 образов от AI-стилиста",
         "generations": 50,
-        "stars": 200,
+        "stars": 250,
+    },
+    "investor": {
+        "title": "ИНВЕСТОР",
+        "description": "250 образов от AI-стилиста",
+        "generations": 250,
+        "stars": 1000,
     },
 }
 
