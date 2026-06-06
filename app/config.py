@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     s3_public_url: str | None = None
     miniapp_url: str | None = None
     environment: str = "development"
+    image_model: str = "x-ai/grok-image-quality"
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 

@@ -2,8 +2,9 @@ import base64
 
 import httpx
 
+from app.config import settings
+
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
-IMAGE_MODEL = "google/gemini-2.5-flash-image"
 
 _TRY_ON_PROMPT_BASE = (
     "Virtually dress the person from the first photo in the clothing item from the second photo. "
@@ -33,7 +34,7 @@ async def generate_try_on(
                 "Content-Type": "application/json",
             },
             json={
-                "model": IMAGE_MODEL,
+                "model": settings.image_model,
                 "messages": [
                     {
                         "role": "user",
