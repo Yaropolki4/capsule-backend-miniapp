@@ -1,8 +1,11 @@
 import base64
+import logging
 
 import httpx
 
 from app.config import settings
+
+logger = logging.getLogger(__name__)
 
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
@@ -48,8 +51,11 @@ async def generate_try_on(
                 "image_config": {"aspect_ratio": "2:3"},
             },
         )
+        if not response.is_success:
+            logger.error("OpenRouter error %s: %s", response.status_code, response.text)
         response.raise_for_status()
         result = response.json()
+        logger.debug("OpenRouter response: %s", result)
 
     if not result.get("choices"):
         return None
