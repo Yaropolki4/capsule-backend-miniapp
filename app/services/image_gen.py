@@ -45,7 +45,6 @@ async def generate_try_on(
                         ],
                     }
                 ],
-                "modalities": ["image", "text"],
                 "image_config": {"aspect_ratio": "2:3"},
             },
         )
@@ -56,6 +55,8 @@ async def generate_try_on(
         return None
 
     message = result["choices"][0]["message"]
+
+    # Gemini-style: images field
     for image in message.get("images", []):
         url = image.get("image_url", {}).get("url", "")
         if url.startswith("data:image"):
@@ -65,5 +66,26 @@ async def generate_try_on(
             async with httpx.AsyncClient(timeout=30.0) as client:
                 resp = await client.get(url)
                 return resp.content
+
+    # Grok / standard: content as string URL or content blocks
+    content = message.get("content", "")
+    if isinstance(content, str):
+        if content.startswith("data:image"):
+            _, data = content.split(",", 1)
+            return base64.b64decode(data)
+        if content.startswith("http"):
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                resp = await client.get(content)
+                return resp.content
+    elif isinstance(content, list):
+        for block in content:
+            url = block.get("image_url", {}).get("url", "") if isinstance(block, dict) else ""
+            if url.startswith("data:image"):
+                _, data = url.split(",", 1)
+                return base64.b64decode(data)
+            if url.startswith("http"):
+                async with httpx.AsyncClient(timeout=30.0) as client:
+                    resp = await client.get(url)
+                    return resp.content
 
     return None
