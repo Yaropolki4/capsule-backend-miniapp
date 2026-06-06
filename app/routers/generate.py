@@ -1,4 +1,6 @@
+import json
 import logging
+from pathlib import Path
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException
@@ -19,6 +21,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 router = APIRouter(prefix="/generate", tags=["generate"])
 
 _TG_API = "https://api.telegram.org"
+_CLOTHES_PATH = Path(__file__).parent.parent.parent / "clothes.json"
+
+
+def _load_item(item_id: int) -> dict | None:
+    with open(_CLOTHES_PATH, encoding="utf-8") as f:
+        clothes = json.load(f)
+    return next((c for c in clothes if c["id"] == item_id), None)
 
 
 class TryOnRequest(BaseModel):
@@ -83,8 +92,16 @@ async def try_on(
 
         user_photo_url = await upload_bytes(photo_bytes, "image/jpeg")
 
-    logger.info("try-on generating | user=%s item=%s", user.telegram_id, body.item_title)
-    result_bytes = await generate_try_on(user_photo_url, body.item_image_url, settings.open_router_key, body.generation_prompt)
+    generation_prompt = body.generation_prompt
+    item_type = None
+    if body.item_id is not None:
+        catalog_item = _load_item(body.item_id)
+        if catalog_item:
+            generation_prompt = catalog_item.get("generation_prompt") or generation_prompt
+            item_type = catalog_item.get("item_type")
+
+    logger.info("try-on generating | user=%s item=%s type=%s", user.telegram_id, body.item_title, item_type)
+    result_bytes = await generate_try_on(user_photo_url, body.item_image_url, settings.open_router_key, generation_prompt, item_type)
     if not result_bytes:
         logger.error("Image generation returned no result | user=%s item=%s", user.telegram_id, body.item_title)
         raise HTTPException(status_code=502, detail="Image generation failed")

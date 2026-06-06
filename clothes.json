@@ -445,7 +445,8 @@
     "tags": "Сумка cross Боди зелёного (травяного) цвета",
     "link": "https://www.wildberries.ru/catalog/297511127/detail.aspx?size=452529399",
     "image": "https://basket-18.wbbasket.ru/vol2975/part297511/297511127/images/big/1.webp",
-    "generation_prompt": "Размер сумки средний"
+    "generation_prompt": "Размер сумки средний",
+    "item_type": "accessory"
   },
   {
     "id": 57,
@@ -461,7 +462,8 @@
     "tags": "Сумка cross Боди через плечо чёрного цвета",
     "link": "https://www.wildberries.ru/catalog/740051754/detail.aspx?size=1056886104",
     "image": "https://basket-35.wbbasket.ru/vol7400/part740051/740051754/images/big/1.webp",
-    "generation_prompt": "Средний размер"
+    "generation_prompt": "Средний размер",
+    "item_type": "accessory"
   },
   {
     "id": 59,
@@ -477,7 +479,8 @@
     "tags": "Сумка поясная (бананка) брендовая Guess чёрного цвета средний размер",
     "link": "https://www.wildberries.ru/catalog/899106790/detail.aspx?size=1359378415",
     "image": "https://basket-39.wbbasket.ru/vol8991/part899106/899106790/images/big/1.webp",
-    "generation_prompt": ""
+    "generation_prompt": "",
+    "item_type": "accessory"
   },
   {
     "id": 61,
@@ -485,7 +488,8 @@
     "tags": "Сумка через плечо на цепочки чёрного цвета бренд Guess",
     "link": "https://www.wildberries.ru/catalog/734620332/detail.aspx?size=1040958095",
     "image": "https://basket-34.wbbasket.ru/vol7346/part734620/734620332/images/big/1.webp",
-    "generation_prompt": "Маленький размер"
+    "generation_prompt": "Маленький размер",
+    "item_type": "accessory"
   },
   {
     "id": 62,
@@ -525,7 +529,8 @@
     "tags": "Сумка хобо с цепочкой стеганая серого цвета материал болоневый трендовая с серебряной цепочкой минималистичная большого размера",
     "link": "https://www.wildberries.ru/catalog/817168381/detail.aspx?size=1223778077",
     "image": "https://basket-37.wbbasket.ru/vol8171/part817168/817168381/images/big/3.webp",
-    "generation_prompt": ""
+    "generation_prompt": "",
+    "item_type": "accessory"
   },
   {
     "id": 67,
@@ -549,7 +554,8 @@
     "tags": "Сумка бежевого цвета трендовая дутая стеганая минималистично логотипом в центре большого размера",
     "link": "https://www.wildberries.ru/catalog/182580827/detail.aspx?size=301134996",
     "image": "https://basket-12.wbbasket.ru/vol1825/part182580/182580827/images/big/3.webp",
-    "generation_prompt": "Большого размера"
+    "generation_prompt": "Большого размера",
+    "item_type": "accessory"
   },
   {
     "id": 70,
@@ -573,6 +579,7 @@
     "tags": "Сумка хобо бордовая через плечо лакированная среднего размера",
     "link": "https://www.wildberries.ru/catalog/227824023/detail.aspx?size=360393607",
     "image": "https://basket-15.wbbasket.ru/vol2278/part227824/227824023/images/big/7.webp",
-    "generation_prompt": "Среднего размера"
+    "generation_prompt": "Среднего размера",
+    "item_type": "accessory"
   }
 ]

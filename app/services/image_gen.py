@@ -21,11 +21,23 @@ _TRY_ON_PROMPT_BASE = (
     "- Output a realistic, high-quality photo at the same resolution and perspective as the input."
 )
 
+_ACCESSORY_PROMPT_BASE = (
+    "Show the person from the first photo naturally carrying or wearing the bag from the second photo. "
+    "Rules:\n"
+    "- The bag should appear held in hand, on the shoulder, or crossbody — whichever matches its style.\n"
+    "- Preserve the person's face, skin tone, pose, and body proportions exactly as in the original photo.\n"
+    "- Do NOT rotate, flip, mirror, or change the camera angle of the photo in any way.\n"
+    "- Preserve the original background and lighting conditions exactly.\n"
+    "- Do NOT modify any clothing items in the photo.\n"
+    "- Show the bag at a realistic size and position, with natural lighting and shadows.\n"
+    "- Output a realistic, high-quality photo at the same resolution and perspective as the input."
+)
+
 
 async def generate_try_on(
-    user_photo_url: str, item_image_url: str, api_key: str, generation_prompt: str | None = None
+    user_photo_url: str, item_image_url: str, api_key: str, generation_prompt: str | None = None, item_type: str | None = None
 ) -> bytes | None:
-    prompt = _TRY_ON_PROMPT_BASE
+    prompt = _ACCESSORY_PROMPT_BASE if item_type == "accessory" else _TRY_ON_PROMPT_BASE
     if generation_prompt:
         prompt += f"\n\nCRITICAL fit requirement — you MUST follow this exactly: {generation_prompt}"
 
