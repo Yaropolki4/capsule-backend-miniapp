@@ -1,7 +1,10 @@
 import json
+import logging
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException
+
+logger = logging.getLogger(__name__)
 
 from app.config import settings
 from app.dependencies import get_current_user
@@ -53,6 +56,8 @@ async def create_invoice(
         data = resp.json()
 
     if not data.get("ok"):
+        logger.error("Telegram createInvoiceLink failed | user=%s tariff=%s response=%s", user.telegram_id, tariff, data)
         raise HTTPException(status_code=500, detail="Failed to create invoice")
 
+    logger.info("Invoice created | user=%s tariff=%s", user.telegram_id, tariff)
     return {"invoice_link": data["result"]}

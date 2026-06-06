@@ -14,6 +14,8 @@ class Settings(BaseSettings):
     miniapp_url: str | None = None
     environment: str = "development"
     image_model: str = "x-ai/grok-imagine-image-quality"
+    admin_chat_id: str = "@Yaropolkpisarev"
+    log_level: str = "INFO"
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 

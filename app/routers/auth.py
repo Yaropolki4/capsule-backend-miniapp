@@ -1,6 +1,9 @@
 import json
+import logging
 
 from fastapi import APIRouter, Depends, HTTPException
+
+logger = logging.getLogger(__name__)
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud.user import get_or_create_user
@@ -21,10 +24,14 @@ async def auth(init_data: str, db: AsyncSession = Depends(get_db)):
     if not telegram_id:
         raise HTTPException(status_code=400, detail="User data missing")
 
-    user, _ = await get_or_create_user(
+    user, created = await get_or_create_user(
         db,
         telegram_id=telegram_id,
         username=tg_user.get("username"),
         first_name=tg_user.get("first_name"),
     )
+    if created:
+        logger.info("New user registered | telegram_id=%s username=%s", telegram_id, tg_user.get("username"))
+    else:
+        logger.debug("User authenticated | telegram_id=%s", telegram_id)
     return user

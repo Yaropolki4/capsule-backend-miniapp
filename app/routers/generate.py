@@ -1,8 +1,12 @@
+import logging
+
 import httpx
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from app.config import settings
+
+logger = logging.getLogger(__name__)
 from app.crud.outfit import create_outfit, get_user_outfits
 from app.crud.user import use_generation
 from app.database import AsyncSessionFactory
@@ -49,7 +53,10 @@ async def try_on(
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
+    logger.info("try-on started | user=%s generations_left=%s", user.telegram_id, user.generations_left)
+
     if user.generations_left <= 0:
+        logger.warning("try-on rejected: no generations left | user=%s", user.telegram_id)
         raise HTTPException(status_code=402, detail="No generations left")
 
     if not body.photo_file_id and not body.photo_url:
@@ -65,6 +72,7 @@ async def try_on(
             )
             file_data = file_resp.json()
             if not file_data.get("ok"):
+                logger.error("Failed to get file from Telegram | user=%s file_id=%s", user.telegram_id, body.photo_file_id)
                 raise HTTPException(status_code=400, detail="Failed to get file info from Telegram")
 
             file_path = file_data["result"]["file_path"]
@@ -75,11 +83,14 @@ async def try_on(
 
         user_photo_url = await upload_bytes(photo_bytes, "image/jpeg")
 
+    logger.info("try-on generating | user=%s item=%s", user.telegram_id, body.item_title)
     result_bytes = await generate_try_on(user_photo_url, body.item_image_url, settings.open_router_key, body.generation_prompt)
     if not result_bytes:
+        logger.error("Image generation returned no result | user=%s item=%s", user.telegram_id, body.item_title)
         raise HTTPException(status_code=502, detail="Image generation failed")
 
     generated_url = await upload_bytes(result_bytes, "image/jpeg")
+    logger.info("try-on done | user=%s outfit_url=%s", user.telegram_id, generated_url)
 
     await use_generation(db, user.id)
 
