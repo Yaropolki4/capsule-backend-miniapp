@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 from pathlib import Path
 
 import httpx
@@ -127,6 +128,11 @@ async def try_on(
     return {"outfit_id": outfit.id, "generated_image_url": generated_url}
 
 
+def _extract_wb_article(link: str) -> str | None:
+    m = re.search(r"/catalog/(\d+)/", link)
+    return m.group(1) if m else None
+
+
 async def _notify_user(
     telegram_id: int,
     image_url: str,
@@ -137,7 +143,10 @@ async def _notify_user(
     if item_title:
         caption_parts.append(f"Товар: {item_title}")
     if item_link:
-        caption_parts.append(f"Ссылка на WB: {item_link}")
+        article = _extract_wb_article(item_link)
+        if article:
+            caption_parts.append(f"Артикул: <code>{article}</code>")
+        caption_parts.append(f'<a href="{item_link}">Открыть на WB</a>')
     caption = "\n".join(caption_parts)
 
     async with httpx.AsyncClient(timeout=30.0) as client:
@@ -147,5 +156,6 @@ async def _notify_user(
                 "chat_id": telegram_id,
                 "photo": image_url,
                 "caption": caption,
+                "parse_mode": "HTML",
             },
         )
