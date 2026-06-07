@@ -126,7 +126,7 @@ async def try_on(
             item_link=body.item_link,
         )
 
-    await _notify_user(user.telegram_id, generated_url, body.item_title, body.item_link)
+    await _notify_user(user.telegram_id, generated_url, body.item_title, body.item_link, outfit_id=outfit.id)
 
     return {"outfit_id": outfit.id, "generated_image_url": generated_url}
 
@@ -172,6 +172,7 @@ async def _notify_user(
     image_url: str,
     item_title: str | None,
     item_link: str | None,
+    outfit_id: int | None = None,
 ) -> None:
     caption_parts = ["Ваш образ готов!"]
     if item_title:
@@ -181,7 +182,20 @@ async def _notify_user(
         if article:
             caption_parts.append(f"Артикул: <code>{article}</code>")
         caption_parts.append(f'<a href="{item_link}">Открыть на WB</a>')
+    caption_parts.append("\nКак вам результат?")
     caption = "\n".join(caption_parts)
+
+    reply_markup = None
+    if outfit_id is not None:
+        reply_markup = {
+            "inline_keyboard": [[
+                {"text": "⭐", "callback_data": f"rate:{outfit_id}:1"},
+                {"text": "⭐⭐", "callback_data": f"rate:{outfit_id}:2"},
+                {"text": "⭐⭐⭐", "callback_data": f"rate:{outfit_id}:3"},
+                {"text": "⭐⭐⭐⭐", "callback_data": f"rate:{outfit_id}:4"},
+                {"text": "⭐⭐⭐⭐⭐", "callback_data": f"rate:{outfit_id}:5"},
+            ]]
+        }
 
     async with httpx.AsyncClient(timeout=30.0) as client:
         await client.post(
@@ -191,5 +205,6 @@ async def _notify_user(
                 "photo": image_url,
                 "caption": caption,
                 "parse_mode": "HTML",
+                **({"reply_markup": reply_markup} if reply_markup else {}),
             },
         )

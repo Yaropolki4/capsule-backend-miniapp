@@ -121,7 +121,7 @@ async def _run_start_generation(bot: Bot, telegram_id: int, user_id: int) -> Non
             await use_generation(db, user_id)
 
         async with AsyncSessionFactory() as db:
-            await create_outfit(
+            outfit = await create_outfit(
                 db,
                 user_id=user_id,
                 generated_image_url=generated_url,
@@ -135,14 +135,23 @@ async def _run_start_generation(bot: Bot, telegram_id: int, user_id: int) -> Non
             f"🎉 Твой образ готов!\n\n"
             f"Вещь: {item['title']}\n"
             f"Купить на WB: {item['link']}\n\n"
-            f"Хочешь подобрать что-то своё? Открой приложение и попробуй AI-подбор!"
+            f"Хочешь подобрать что-то своё? Открой приложение и попробуй AI-подбор!\n\n"
+            f"Как вам результат?"
         )
+
+        rating_keyboard = InlineKeyboardMarkup(inline_keyboard=[[
+            InlineKeyboardButton(text="⭐", callback_data=f"rate:{outfit.id}:1"),
+            InlineKeyboardButton(text="⭐⭐", callback_data=f"rate:{outfit.id}:2"),
+            InlineKeyboardButton(text="⭐⭐⭐", callback_data=f"rate:{outfit.id}:3"),
+            InlineKeyboardButton(text="⭐⭐⭐⭐", callback_data=f"rate:{outfit.id}:4"),
+            InlineKeyboardButton(text="⭐⭐⭐⭐⭐", callback_data=f"rate:{outfit.id}:5"),
+        ]])
 
         await bot.send_photo(
             chat_id=telegram_id,
             photo=generated_url,
             caption=caption,
-            reply_markup=_open_app_keyboard(),
+            reply_markup=rating_keyboard,
         )
 
     except Exception as e:
