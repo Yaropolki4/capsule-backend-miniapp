@@ -32,3 +32,16 @@ async def get_user_outfits(db: AsyncSession, user_id: int) -> list[Outfit]:
         select(Outfit).where(Outfit.user_id == user_id).order_by(Outfit.created_at.desc())
     )
     return list(result.scalars().all())
+
+
+async def rate_outfit(db: AsyncSession, outfit_id: int, user_id: int, stars: int) -> Outfit | None:
+    result = await db.execute(
+        select(Outfit).where(Outfit.id == outfit_id, Outfit.user_id == user_id)
+    )
+    outfit = result.scalar_one_or_none()
+    if outfit is None or outfit.stars is not None:
+        return None
+    outfit.stars = stars
+    await db.commit()
+    await db.refresh(outfit)
+    return outfit

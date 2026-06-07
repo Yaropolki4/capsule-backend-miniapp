@@ -20,7 +20,7 @@ from app.bot.handlers import start as start_handler
 from app.bot.middleware import DbSessionMiddleware
 from app.config import settings
 from app.database import AsyncSessionFactory, engine, Base
-from app.routers import auth, messages, payments, users, ws, generate
+from app.routers import auth, messages, payments, users, ws, generate, feedback
 from app.services.notify import notify_admin, format_error_message
 
 
@@ -116,6 +116,7 @@ app.include_router(messages.router)
 app.include_router(users.router)
 app.include_router(ws.router)
 app.include_router(generate.router)
+app.include_router(feedback.router)
 
 
 @app.get("/debug/error-test")

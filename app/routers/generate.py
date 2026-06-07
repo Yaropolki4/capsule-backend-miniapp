@@ -1,3 +1,5 @@
+import asyncio
+import html
 import json
 import logging
 import re
@@ -5,17 +7,18 @@ from pathlib import Path
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from app.config import settings
 
 logger = logging.getLogger(__name__)
-from app.crud.outfit import create_outfit, get_user_outfits
+from app.crud.outfit import create_outfit, get_user_outfits, rate_outfit
 from app.crud.user import use_generation
 from app.database import AsyncSessionFactory
 from app.dependencies import get_current_user, get_db
 from app.models.user import User
 from app.services.image_gen import generate_try_on
+from app.services.notify import notify_admin
 from app.services.s3 import upload_bytes
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -126,6 +129,36 @@ async def try_on(
     await _notify_user(user.telegram_id, generated_url, body.item_title, body.item_link)
 
     return {"outfit_id": outfit.id, "generated_image_url": generated_url}
+
+
+class RateIn(BaseModel):
+    stars: int = Field(..., ge=1, le=5)
+
+
+STARS = {1: "⭐", 2: "⭐⭐", 3: "⭐⭐⭐", 4: "⭐⭐⭐⭐", 5: "⭐⭐⭐⭐⭐"}
+
+
+@router.post("/outfits/{outfit_id}/rate")
+async def rate_outfit_endpoint(
+    outfit_id: int,
+    body: RateIn,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    outfit = await rate_outfit(db, outfit_id, user.id, body.stars)
+    if outfit is None:
+        raise HTTPException(status_code=409, detail="Already rated or not found")
+
+    username = f"@{user.username}" if user.username else user.first_name or str(user.telegram_id)
+    lines = [
+        "🖼 <b>Оценка образа</b>",
+        f"<b>От:</b> {username}",
+        f"<b>Оценка:</b> {STARS[body.stars]}",
+    ]
+    if outfit.item_title:
+        lines.append(f"<b>Образ:</b> {html.escape(outfit.item_title)}")
+    asyncio.create_task(notify_admin("\n".join(lines), settings.bot_token, settings.admin_chat_id))
+    return {"ok": True}
 
 
 def _extract_wb_article(link: str) -> str | None:

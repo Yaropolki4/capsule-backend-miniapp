@@ -17,3 +17,4 @@ class Outfit(Base):
     item_link: Mapped[str | None] = mapped_column(String, nullable=True)
     generated_image_url: Mapped[str] = mapped_column(String, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), nullable=False)
+    stars: Mapped[int | None] = mapped_column(Integer, nullable=True)
