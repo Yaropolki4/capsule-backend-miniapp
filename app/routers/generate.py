@@ -157,6 +157,7 @@ async def rate_outfit_endpoint(
     ]
     if outfit.item_title:
         lines.append(f"<b>Образ:</b> {html.escape(outfit.item_title)}")
+    lines.append(f"<b>Картинка:</b> {html.escape(outfit.generated_image_url)}")
     asyncio.create_task(notify_admin("\n".join(lines), settings.bot_token, settings.admin_chat_id))
     return {"ok": True}
 
