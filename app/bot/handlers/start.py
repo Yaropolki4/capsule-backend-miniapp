@@ -140,11 +140,11 @@ async def _run_start_generation(bot: Bot, telegram_id: int, user_id: int) -> Non
         )
 
         rating_keyboard = InlineKeyboardMarkup(inline_keyboard=[[
-            InlineKeyboardButton(text="⭐", callback_data=f"rate:{outfit.id}:1"),
-            InlineKeyboardButton(text="⭐⭐", callback_data=f"rate:{outfit.id}:2"),
-            InlineKeyboardButton(text="⭐⭐⭐", callback_data=f"rate:{outfit.id}:3"),
-            InlineKeyboardButton(text="⭐⭐⭐⭐", callback_data=f"rate:{outfit.id}:4"),
-            InlineKeyboardButton(text="⭐⭐⭐⭐⭐", callback_data=f"rate:{outfit.id}:5"),
+            InlineKeyboardButton(text="★", callback_data=f"rate:{outfit.id}:1"),
+            InlineKeyboardButton(text="★★", callback_data=f"rate:{outfit.id}:2"),
+            InlineKeyboardButton(text="★★★", callback_data=f"rate:{outfit.id}:3"),
+            InlineKeyboardButton(text="★★★★", callback_data=f"rate:{outfit.id}:4"),
+            InlineKeyboardButton(text="★★★★★", callback_data=f"rate:{outfit.id}:5"),
         ]])
 
         await bot.send_photo(

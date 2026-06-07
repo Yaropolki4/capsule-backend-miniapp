@@ -189,11 +189,11 @@ async def _notify_user(
     if outfit_id is not None:
         reply_markup = {
             "inline_keyboard": [[
-                {"text": "⭐", "callback_data": f"rate:{outfit_id}:1"},
-                {"text": "⭐⭐", "callback_data": f"rate:{outfit_id}:2"},
-                {"text": "⭐⭐⭐", "callback_data": f"rate:{outfit_id}:3"},
-                {"text": "⭐⭐⭐⭐", "callback_data": f"rate:{outfit_id}:4"},
-                {"text": "⭐⭐⭐⭐⭐", "callback_data": f"rate:{outfit_id}:5"},
+                {"text": "★", "callback_data": f"rate:{outfit_id}:1"},
+                {"text": "★★", "callback_data": f"rate:{outfit_id}:2"},
+                {"text": "★★★", "callback_data": f"rate:{outfit_id}:3"},
+                {"text": "★★★★", "callback_data": f"rate:{outfit_id}:4"},
+                {"text": "★★★★★", "callback_data": f"rate:{outfit_id}:5"},
             ]]
         }
 
