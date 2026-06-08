@@ -37,6 +37,15 @@ def to_proxy_url(s3_url: str, api_base: str) -> str:
     return f"{api_base.rstrip('/')}/media/{key}"
 
 
+def proxy_url_to_s3_url(url: str, api_base: str) -> str:
+    """Convert a proxy URL back to the original S3 URL for use with external services."""
+    prefix = f"{api_base.rstrip('/')}/media/"
+    if url.startswith(prefix):
+        key = url[len(prefix):]
+        return f"{_s3_base_url()}/{key}"
+    return url
+
+
 async def upload_bytes(data: bytes, content_type: str, prefix: str = "generated") -> str:
     key = f"{prefix}/{uuid.uuid4()}.jpg"
 

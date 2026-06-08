@@ -19,7 +19,7 @@ from app.dependencies import get_current_user, get_db
 from app.models.user import User
 from app.services.image_gen import generate_try_on
 from app.services.notify import notify_admin
-from app.services.s3 import upload_bytes, to_proxy_url
+from app.services.s3 import upload_bytes, to_proxy_url, proxy_url_to_s3_url
 from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter(prefix="/generate", tags=["generate"])
@@ -78,7 +78,7 @@ async def try_on(
         raise HTTPException(status_code=400, detail="photo_file_id or photo_url required")
 
     if body.photo_url:
-        user_photo_url = body.photo_url
+        user_photo_url = proxy_url_to_s3_url(body.photo_url, str(request.base_url))
     else:
         async with httpx.AsyncClient(timeout=30.0) as client:
             file_resp = await client.get(
