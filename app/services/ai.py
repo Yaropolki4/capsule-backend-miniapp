@@ -1,14 +1,18 @@
 import base64
 import json
+import logging
 from collections.abc import AsyncGenerator
 
 import httpx
+
+logger = logging.getLogger(__name__)
 
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 OPENROUTER_MODEL = "anthropic/claude-haiku-4-5"
 
 
 async def infer_gender_from_name(first_name: str, api_key: str) -> str | None:
+    logger.info("infer_gender_from_name name=%r", first_name)
     messages = [
         {
             "role": "user",
@@ -35,41 +39,43 @@ async def infer_gender_from_name(first_name: str, api_key: str) -> str | None:
         )
         response.raise_for_status()
         data = response.json()
-        result = data["choices"][0]["message"]["content"].strip().lower()
-        return result if result in ("male", "female") else None
+        raw = data["choices"][0]["message"]["content"].strip().lower()
+        result = raw if raw in ("male", "female") else None
+        logger.info("infer_gender_from_name name=%r raw=%r -> %r", first_name, raw, result)
+        return result
 
 
 async def select_best_photo(photo_bytes_list: list[bytes], gender: str, api_key: str) -> int | None:
     """Returns 0-based index of the best photo for try-on, or None if no suitable photo found."""
+    n = len(photo_bytes_list)
+    logger.info("select_best_photo n=%d gender=%r", n, gender)
+
     if gender == "female":
-        criteria = (
-            "We need a full body photo (whole figure visible) for virtual dress try-on. "
-            "If no full body photo exists, a clear upper body photo (chest and up) is acceptable."
-        )
+        preference = "Prefer a full body shot, but a face or upper body photo is fine too."
     else:
-        criteria = (
-            "We need a clear upper body photo (chest, shoulders, face visible) for virtual hoodie try-on. "
-            "If no upper body photo exists, a full body photo is acceptable."
-        )
+        preference = "Prefer an upper body shot, but a face or full body photo is fine too."
 
     content: list[dict] = [
         {
             "type": "text",
             "text": (
-                f"Select the best photo for virtual clothing try-on. {criteria} "
-                "The photo must show a single real person facing roughly forward with good lighting. "
-                "Photos of animals, objects, landscapes, memes, or groups are NOT suitable. "
-                f"There are {len(photo_bytes_list)} photo(s) indexed 0 to {len(photo_bytes_list) - 1}. "
-                "Respond with ONLY a single integer: the index of the best photo, or -1 if none are suitable."
+                f"Pick the best photo of a real person for virtual clothing try-on. {preference} "
+                "Any photo that clearly shows a real human is suitable — face shots are OK. "
+                "Only return -1 if a photo contains NO real person at all (animal, object, meme, landscape). "
+                f"There are {n} photo(s) indexed 0 to {n - 1}. "
+                "Respond with ONLY a single integer: the index of the best photo, or -1 if none contain a real person."
             ),
         }
     ]
+    total_b64_bytes = 0
     for photo_bytes in photo_bytes_list:
         b64 = base64.b64encode(photo_bytes).decode()
+        total_b64_bytes += len(b64)
         content.append({
             "type": "image_url",
             "image_url": {"url": f"data:image/jpeg;base64,{b64}"},
         })
+    logger.info("select_best_photo total_b64_size=%d bytes", total_b64_bytes)
 
     async with httpx.AsyncClient(timeout=30.0) as client:
         response = await client.post(
@@ -77,18 +83,27 @@ async def select_best_photo(photo_bytes_list: list[bytes], gender: str, api_key:
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={"model": OPENROUTER_MODEL, "messages": [{"role": "user", "content": content}], "max_tokens": 5},
         )
+        if not response.is_success:
+            logger.error("select_best_photo LLM error status=%d body=%r", response.status_code, response.text[:300])
         response.raise_for_status()
         raw = response.json()["choices"][0]["message"]["content"].strip()
+
+    logger.info("select_best_photo LLM raw response=%r", raw)
 
     try:
         idx = int(raw)
     except ValueError:
+        logger.warning("select_best_photo could not parse %r as int -> returning None", raw)
         return None
 
     if idx == -1:
+        logger.info("select_best_photo LLM returned -1 (no real person detected)")
         return None
-    if 0 <= idx < len(photo_bytes_list):
+    if 0 <= idx < n:
+        logger.info("select_best_photo -> index %d", idx)
         return idx
+
+    logger.warning("select_best_photo idx=%d out of range n=%d -> returning None", idx, n)
     return None
 
 

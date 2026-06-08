@@ -1,4 +1,6 @@
 import json
+import logging
+import time
 from pathlib import Path
 
 from aiogram import Bot
@@ -10,6 +12,8 @@ from app.crud.user import use_generation
 from app.database import AsyncSessionFactory
 from app.services.image_gen import generate_try_on
 from app.services.s3 import upload_bytes
+
+logger = logging.getLogger(__name__)
 
 _CLOTHES_PATH = Path(__file__).parent.parent.parent / "clothes.json"
 
@@ -46,15 +50,21 @@ async def generate_and_send(
     photo_url: str,
     item: dict,
 ) -> None:
+    t0 = time.monotonic()
+    logger.info("tid=%d generate_and_send start item_id=%s title=%r", telegram_id, item.get("id"), item.get("title"))
     try:
+        logger.info("tid=%d calling generate_try_on photo_url=%r item_image=%r", telegram_id, photo_url, item.get("image", "")[:60])
+        t_gen = time.monotonic()
         result_bytes = await generate_try_on(
             photo_url,
             item["image"],
             settings.open_router_key,
             item.get("generation_prompt"),
         )
+        logger.info("tid=%d generate_try_on -> %s (%.1fs)", telegram_id, f"{len(result_bytes)} bytes" if result_bytes else "None", time.monotonic() - t_gen)
 
         if not result_bytes:
+            logger.warning("tid=%d generation returned no bytes", telegram_id)
             await bot.send_message(
                 chat_id=telegram_id,
                 text="Не удалось создать образ. Попробуй ещё раз в приложении.",
@@ -63,9 +73,11 @@ async def generate_and_send(
             return
 
         generated_url = await upload_bytes(result_bytes, "image/jpeg")
+        logger.info("tid=%d generated image uploaded url=%r", telegram_id, generated_url)
 
         async with AsyncSessionFactory() as db:
             await use_generation(db, user_id)
+        logger.info("tid=%d generation credit used user_id=%d", telegram_id, user_id)
 
         async with AsyncSessionFactory() as db:
             outfit = await create_outfit(
@@ -77,6 +89,7 @@ async def generate_and_send(
                 item_image_url=item["image"],
                 item_link=item["link"],
             )
+        logger.info("tid=%d outfit created outfit_id=%d", telegram_id, outfit.id)
 
         caption = (
             f"🎉 Твой образ готов!\n\n"
@@ -100,9 +113,10 @@ async def generate_and_send(
             caption=caption,
             reply_markup=rating_keyboard,
         )
+        logger.info("tid=%d outfit photo sent (%.1fs total)", telegram_id, time.monotonic() - t0)
 
-    except Exception as e:
-        print(f"[generate_and_send] error for telegram_id={telegram_id}: {e}")
+    except Exception:
+        logger.exception("tid=%d generate_and_send failed (%.1fs elapsed)", telegram_id, time.monotonic() - t0)
         try:
             await bot.send_message(
                 chat_id=telegram_id,
