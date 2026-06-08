@@ -1,9 +1,6 @@
 import asyncio
-import json
 import logging
-import random
 import time
-from pathlib import Path
 
 import httpx
 from aiogram import Bot, Router
@@ -26,15 +23,7 @@ from app.services.s3 import upload_bytes
 logger = logging.getLogger(__name__)
 router = Router()
 
-_CLOTHES_PATH = Path(__file__).parent.parent.parent.parent / "clothes.json"
 _TG_API = "https://api.telegram.org"
-_UPPER_TAGS = {"худи", "футболка", "лонгслив", "зип"}
-
-
-def _load_upper_items() -> list[dict]:
-    with open(_CLOTHES_PATH, encoding="utf-8") as f:
-        clothes = json.load(f)
-    return [c for c in clothes if any(tag in c["tags"].lower() for tag in _UPPER_TAGS)]
 
 
 @router.message(CommandStart())
@@ -55,20 +44,18 @@ async def handle_start(message: Message, db: AsyncSession, bot: Bot):
             f"Привет, {tg_user.first_name}! Добро пожаловать в Capsule.\n"
             f"У тебя {user.generations_left} бесплатных генерации образов."
         )
+        await message.answer(
+            "✨ Подбираю тебе образ прямо сейчас — займёт около минуты.\n"
+            "Пока ждёшь, можешь открыть приложение и выбрать что-то сам."
+        )
+        asyncio.create_task(
+            _run_start_generation(bot, tg_user.id, user.id, tg_user.first_name)
+        )
     else:
         await message.answer(
             f"С возвращением, {tg_user.first_name}!\n"
             f"У тебя осталось {user.generations_left} генераций."
         )
-
-    await message.answer(
-        "✨ Подбираю тебе образ прямо сейчас — займёт около минуты.\n"
-        "Пока ждёшь, можешь открыть приложение и выбрать что-то сам."
-    )
-
-    asyncio.create_task(
-        _run_start_generation(bot, tg_user.id, user.id, tg_user.first_name)
-    )
 
 
 async def _run_start_generation(
@@ -142,8 +129,15 @@ async def _run_start_generation(
         photo_url = await upload_bytes(all_photo_bytes[best_idx], "image/jpeg")
         logger.info("tid=%d photo uploaded url=%r", telegram_id, photo_url)
 
-        items = _load_upper_items()
-        item = random.choice(items)
+        item = default_item_for_gender(gender)
+        if not item:
+            logger.error("tid=%d default item not found for gender=%r", telegram_id, gender)
+            await bot.send_message(
+                chat_id=telegram_id,
+                text="Не удалось найти подходящий образ. Зайди в приложение!",
+                reply_markup=open_app_keyboard(),
+            )
+            return
         logger.info("tid=%d selected item id=%s title=%r", telegram_id, item.get("id"), item.get("title"))
 
         await generate_and_send(bot, telegram_id, user_id, photo_url, item)
