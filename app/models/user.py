@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import BigInteger, DateTime, Integer, String, func
+from sqlalchemy import BigInteger, Boolean, DateTime, Integer, String, func
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -18,3 +18,4 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), nullable=False)
     photos: Mapped[list | None] = mapped_column(JSONB, nullable=True)
     gender: Mapped[str | None] = mapped_column(String(16), nullable=True)
+    waiting_for_photo: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default="false")
