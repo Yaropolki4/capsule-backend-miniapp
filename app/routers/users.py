@@ -1,5 +1,5 @@
 import httpx
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, Request, UploadFile, File
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -8,7 +8,7 @@ from app.crud.user import add_user_photo, set_user_gender
 from app.dependencies import get_current_user, get_db
 from app.models.user import User
 from app.schemas.user import UserOut
-from app.services.s3 import upload_bytes
+from app.services.s3 import upload_bytes, to_proxy_url
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -31,11 +31,12 @@ async def update_gender(
 
 
 @router.post("/photos")
-async def get_user_photos(user: User = Depends(get_current_user)):
+async def get_user_photos(request: Request, user: User = Depends(get_current_user)):
     bot_token = settings.bot_token
+    api_base = str(request.base_url)
 
     user_photos = [
-        {"file_id": None, "url": u, "width": 0, "height": 0, "source": "user"}
+        {"file_id": None, "url": to_proxy_url(u, api_base), "width": 0, "height": 0, "source": "user"}
         for u in (user.photos or [])
     ]
 
@@ -69,6 +70,7 @@ async def get_user_photos(user: User = Depends(get_current_user)):
 
 @router.post("/upload-photo")
 async def upload_photo(
+    request: Request,
     file: UploadFile = File(...),
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
@@ -76,4 +78,4 @@ async def upload_photo(
     data = await file.read()
     url = await upload_bytes(data, file.content_type or "image/jpeg", prefix="user-photos")
     user = await add_user_photo(db, user, url)
-    return {"ok": True, "url": url, "photos": user.photos}
+    return {"ok": True, "url": to_proxy_url(url, str(request.base_url)), "photos": user.photos}

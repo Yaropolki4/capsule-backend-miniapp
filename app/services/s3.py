@@ -18,6 +18,25 @@ def _get_client():
     )
 
 
+def _s3_base_url() -> str:
+    base = settings.s3_public_url or f"{settings.s3_endpoint}/{settings.s3_bucket}"
+    return base.rstrip("/")
+
+
+def s3_key_from_url(url: str) -> str | None:
+    base = _s3_base_url()
+    if url.startswith(base + "/"):
+        return url[len(base) + 1:]
+    return None
+
+
+def to_proxy_url(s3_url: str, api_base: str) -> str:
+    key = s3_key_from_url(s3_url)
+    if key is None:
+        return s3_url
+    return f"{api_base.rstrip('/')}/media/{key}"
+
+
 async def upload_bytes(data: bytes, content_type: str, prefix: str = "generated") -> str:
     key = f"{prefix}/{uuid.uuid4()}.jpg"
 
@@ -33,5 +52,14 @@ async def upload_bytes(data: bytes, content_type: str, prefix: str = "generated"
 
     await asyncio.to_thread(_upload)
 
-    base_url = settings.s3_public_url or f"{settings.s3_endpoint}/{settings.s3_bucket}"
+    base_url = _s3_base_url()
     return f"{base_url}/{key}"
+
+
+async def download_bytes(key: str) -> tuple[bytes, str]:
+    def _download():
+        client = _get_client()
+        resp = client.get_object(Bucket=settings.s3_bucket, Key=key)
+        return resp["Body"].read(), resp.get("ContentType", "image/jpeg")
+
+    return await asyncio.to_thread(_download)

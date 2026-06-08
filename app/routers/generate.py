@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 import httpx
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 
 from app.config import settings
@@ -19,7 +19,7 @@ from app.dependencies import get_current_user, get_db
 from app.models.user import User
 from app.services.image_gen import generate_try_on
 from app.services.notify import notify_admin
-from app.services.s3 import upload_bytes
+from app.services.s3 import upload_bytes, to_proxy_url
 from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter(prefix="/generate", tags=["generate"])
@@ -45,15 +45,16 @@ class TryOnRequest(BaseModel):
 
 
 @router.post("/outfits")
-async def list_outfits(user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+async def list_outfits(request: Request, user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
     outfits = await get_user_outfits(db, user.id)
+    api_base = str(request.base_url)
     return [
         {
             "id": o.id,
             "item_title": o.item_title,
-            "item_image_url": o.item_image_url,
+            "item_image_url": to_proxy_url(o.item_image_url, api_base) if o.item_image_url else None,
             "item_link": o.item_link,
-            "generated_image_url": o.generated_image_url,
+            "generated_image_url": to_proxy_url(o.generated_image_url, api_base),
             "created_at": o.created_at.isoformat(),
         }
         for o in outfits
@@ -62,6 +63,7 @@ async def list_outfits(user: User = Depends(get_current_user), db: AsyncSession 
 
 @router.post("/try-on")
 async def try_on(
+    request: Request,
     body: TryOnRequest,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
@@ -128,7 +130,7 @@ async def try_on(
 
     await _notify_user(user.telegram_id, generated_url, body.item_title, body.item_link, outfit_id=outfit.id)
 
-    return {"outfit_id": outfit.id, "generated_image_url": generated_url}
+    return {"outfit_id": outfit.id, "generated_image_url": to_proxy_url(generated_url, str(request.base_url))}
 
 
 class RateIn(BaseModel):

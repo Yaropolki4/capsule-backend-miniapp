@@ -21,7 +21,7 @@ from app.bot.handlers import rating as rating_handler
 from app.bot.middleware import DbSessionMiddleware
 from app.config import settings
 from app.database import AsyncSessionFactory, engine, Base
-from app.routers import auth, messages, payments, users, ws, generate, feedback
+from app.routers import auth, messages, payments, users, ws, generate, feedback, media
 from app.services.notify import notify_admin, format_error_message
 
 
@@ -119,6 +119,7 @@ app.include_router(users.router)
 app.include_router(ws.router)
 app.include_router(generate.router)
 app.include_router(feedback.router)
+app.include_router(media.router)
 
 
 @app.get("/debug/error-test")
