@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 from aiogram import Bot
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
+from aiogram.types import BufferedInputFile, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 
 from app.config import settings
 from app.crud.outfit import create_outfit
@@ -96,7 +96,7 @@ async def generate_and_send(
 
         await bot.send_photo(
             chat_id=telegram_id,
-            photo=generated_url,
+            photo=BufferedInputFile(result_bytes, filename="outfit.jpg"),
             caption=caption,
             reply_markup=rating_keyboard,
         )

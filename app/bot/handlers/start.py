@@ -6,7 +6,7 @@ from pathlib import Path
 import httpx
 from aiogram import Bot, Router
 from aiogram.filters import CommandStart
-from aiogram.types import Message
+from aiogram.types import BufferedInputFile, Message
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.bot.generation import default_item_for_gender, generate_and_send, open_app_keyboard
@@ -151,9 +151,15 @@ async def _no_photo_flow(
         user = await get_user_by_telegram_id(db, telegram_id)
         await set_waiting_for_photo(db, user, True)
 
+    # Download item image ourselves — Telegram can't fetch Wildberries CDN URLs directly
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        resp = await client.get(item["image"])
+        resp.raise_for_status()
+        item_bytes = resp.content
+
     await bot.send_photo(
         chat_id=telegram_id,
-        photo=item["image"],
+        photo=BufferedInputFile(item_bytes, filename="item.jpg"),
         caption=(
             f"👗 Мы подготовили для тебя этот образ — *{item['title']}*.\n\n"
             "Но нам не удалось найти твоё фото в профиле Telegram, "
