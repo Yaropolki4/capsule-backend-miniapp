@@ -6,11 +6,11 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
 from app.config import settings
 from app.crud.message import create_message, get_recent_messages, update_message, update_message_content
-from app.crud.user import get_user_by_telegram_id
+from app.crud.user import get_user_by_telegram_id, set_user_gender
 from app.database import AsyncSessionFactory
 from app.dependencies import verify_telegram_init_data
 from app.schemas.message import IncomingMessage
-from app.services.ai import stream_ai_response
+from app.services.ai import infer_gender_from_name, stream_ai_response
 from app.services.stylist_prompt import build_system_prompt
 
 router = APIRouter()
@@ -86,7 +86,16 @@ async def websocket_endpoint(websocket: WebSocket, init_data: str):
                         content=msg.body.payload,
                         content_type=msg.body.type,
                     )
-                await _stream_ai(websocket, user.id, gender=fresh_user.gender)
+                gender = fresh_user.gender
+                if gender is None and fresh_user.first_name:
+                    inferred = await infer_gender_from_name(fresh_user.first_name, settings.open_router_key)
+                    if inferred:
+                        async with AsyncSessionFactory() as db:
+                            u = await get_user_by_telegram_id(db, telegram_id)
+                            if u:
+                                await set_user_gender(db, u, inferred)
+                        gender = inferred
+                await _stream_ai(websocket, user.id, gender=gender)
 
             elif event == "cancel_recommendation":
                 await _stream_ai(
