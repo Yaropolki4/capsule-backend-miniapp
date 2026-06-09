@@ -44,9 +44,15 @@ async def handle_start(message: Message, db: AsyncSession, bot: Bot):
             f"Привет, {tg_user.first_name}! Добро пожаловать в Capsule.\n"
             f"У тебя {user.generations_left} бесплатных генерации образов."
         )
+
+        detected = await infer_gender_from_name(tg_user.first_name or "", settings.open_router_key)
+        if detected:
+            await set_user_gender(db, user, detected)
+        self_word = "сама" if detected == "female" else "сам"
+
         await message.answer(
-            "✨ Подбираю тебе образ прямо сейчас — займёт около минуты.\n"
-            "Пока ждёшь, можешь открыть приложение и выбрать что-то сам."
+            f"✨ Подбираю тебе образ прямо сейчас — займёт около минуты.\n"
+            f"Пока ждёшь, можешь открыть приложение и выбрать что-то {self_word}."
         )
         asyncio.create_task(
             _run_start_generation(bot, tg_user.id, user.id, tg_user.first_name)

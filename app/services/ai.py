@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 OPENROUTER_MODEL = "anthropic/claude-haiku-4-5"
+OPENROUTER_MODEL_VISION = "google/gemini-2.5-flash"
 
 
 async def infer_gender_from_name(first_name: str, api_key: str) -> str | None:
@@ -81,7 +82,7 @@ async def select_best_photo(photo_bytes_list: list[bytes], gender: str, api_key:
         response = await client.post(
             OPENROUTER_URL,
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-            json={"model": OPENROUTER_MODEL, "messages": [{"role": "user", "content": content}], "max_tokens": 5},
+            json={"model": OPENROUTER_MODEL_VISION, "messages": [{"role": "user", "content": content}], "max_tokens": 5},
         )
         if not response.is_success:
             logger.error("select_best_photo LLM error status=%d body=%r", response.status_code, response.text[:300])

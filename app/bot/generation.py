@@ -99,13 +99,20 @@ async def generate_and_send(
             "Как тебе результат?"
         )
 
-        rating_keyboard = InlineKeyboardMarkup(inline_keyboard=[[
-            InlineKeyboardButton(text="★", callback_data=f"rate:{outfit.id}:1"),
-            InlineKeyboardButton(text="★★", callback_data=f"rate:{outfit.id}:2"),
-            InlineKeyboardButton(text="★★★", callback_data=f"rate:{outfit.id}:3"),
-            InlineKeyboardButton(text="★★★★", callback_data=f"rate:{outfit.id}:4"),
-            InlineKeyboardButton(text="★★★★★", callback_data=f"rate:{outfit.id}:5"),
-        ]])
+        extra_row = []
+        if settings.miniapp_url:
+            extra_row = [InlineKeyboardButton(text="🛍 Открыть приложение", web_app=WebAppInfo(url=settings.miniapp_url))]
+
+        rating_keyboard = InlineKeyboardMarkup(inline_keyboard=[
+            [
+                InlineKeyboardButton(text="★", callback_data=f"rate:{outfit.id}:1"),
+                InlineKeyboardButton(text="★★", callback_data=f"rate:{outfit.id}:2"),
+                InlineKeyboardButton(text="★★★", callback_data=f"rate:{outfit.id}:3"),
+                InlineKeyboardButton(text="★★★★", callback_data=f"rate:{outfit.id}:4"),
+                InlineKeyboardButton(text="★★★★★", callback_data=f"rate:{outfit.id}:5"),
+            ],
+            *([extra_row] if extra_row else []),
+        ])
 
         await bot.send_photo(
             chat_id=telegram_id,
