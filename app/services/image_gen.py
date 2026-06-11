@@ -34,6 +34,14 @@ _ACCESSORY_PROMPT_BASE = (
 )
 
 
+async def _url_to_data_uri(client: httpx.AsyncClient, url: str) -> str:
+    resp = await client.get(url, timeout=30.0)
+    resp.raise_for_status()
+    content_type = resp.headers.get("content-type", "image/jpeg").split(";")[0].strip()
+    data = base64.b64encode(resp.content).decode()
+    return f"data:{content_type};base64,{data}"
+
+
 async def generate_try_on(
     user_photo_url: str, item_image_url: str, api_key: str, generation_prompt: str | None = None, item_type: str | None = None
 ) -> bytes | None:
@@ -42,6 +50,8 @@ async def generate_try_on(
         prompt += f"\n\nCRITICAL fit requirement — you MUST follow this exactly: {generation_prompt}"
 
     async with httpx.AsyncClient(timeout=120.0) as client:
+        item_data_uri = await _url_to_data_uri(client, item_image_url)
+
         response = await client.post(
             OPENROUTER_URL,
             headers={
@@ -56,7 +66,7 @@ async def generate_try_on(
                         "content": [
                             {"type": "text", "text": prompt},
                             {"type": "image_url", "image_url": {"url": user_photo_url}},
-                            {"type": "image_url", "image_url": {"url": item_image_url}},
+                            {"type": "image_url", "image_url": {"url": item_data_uri}},
                         ],
                     }
                 ],
