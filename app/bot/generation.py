@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 _CLOTHES_PATH = Path(__file__).parent.parent.parent / "clothes.json"
 
 DEFAULT_ITEM_ID_MALE = 5
-DEFAULT_ITEM_ID_FEMALE = 40
+DEFAULT_ITEM_ID_FEMALE = 115
 
 
 def open_app_keyboard() -> InlineKeyboardMarkup | None:
