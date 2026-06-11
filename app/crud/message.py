@@ -1,3 +1,5 @@
+import json
+
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -65,3 +67,22 @@ async def clear_messages(db: AsyncSession, user_id: int) -> None:
         .values(is_deleted=True)
     )
     await db.commit()
+
+
+async def get_shown_item_ids(db: AsyncSession, user_id: int) -> set[int]:
+    result = await db.execute(
+        select(Message.content).where(
+            Message.user_id == user_id,
+            Message.is_deleted == False,
+            Message.content_type == "recommendation",
+        )
+    )
+    item_ids: set[int] = set()
+    for (content,) in result:
+        try:
+            item_id = json.loads(content).get("item", {}).get("id")
+            if isinstance(item_id, int):
+                item_ids.add(item_id)
+        except Exception:
+            pass
+    return item_ids

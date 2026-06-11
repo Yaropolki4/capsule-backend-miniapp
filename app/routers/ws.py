@@ -5,7 +5,7 @@ from pathlib import Path
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
 from app.config import settings
-from app.crud.message import create_message, get_recent_messages, update_message, update_message_content
+from app.crud.message import create_message, get_recent_messages, get_shown_item_ids, update_message, update_message_content
 from app.crud.user import get_user_by_telegram_id, set_user_gender
 from app.database import AsyncSessionFactory
 from app.dependencies import verify_telegram_init_data
@@ -61,6 +61,9 @@ async def websocket_endpoint(websocket: WebSocket, init_data: str):
         await websocket.close(code=4001)
         return
 
+    async with AsyncSessionFactory() as db:
+        shown_item_ids = await get_shown_item_ids(db, user.id)
+
     await websocket.accept()
 
     try:
@@ -95,7 +98,7 @@ async def websocket_endpoint(websocket: WebSocket, init_data: str):
                             if u:
                                 await set_user_gender(db, u, inferred)
                         gender = inferred
-                await _stream_ai(websocket, user.id, gender=gender)
+                await _stream_ai(websocket, user.id, gender=gender, shown_item_ids=shown_item_ids)
 
             elif event == "cancel_recommendation":
                 await _stream_ai(
@@ -103,6 +106,7 @@ async def websocket_endpoint(websocket: WebSocket, init_data: str):
                     user.id,
                     gender=user.gender,
                     synthetic_user_msg="Эта вещь не подошла, предложи другой вариант",
+                    shown_item_ids=shown_item_ids,
                 )
 
     except WebSocketDisconnect:
@@ -114,12 +118,13 @@ async def _stream_ai(
     user_id: int,
     gender: str | None = None,
     synthetic_user_msg: str | None = None,
+    shown_item_ids: set[int] | None = None,
 ) -> None:
     async with AsyncSessionFactory() as db:
         recent = await get_recent_messages(db, user_id, limit=5)
 
     history = (
-        [{"role": "system", "content": build_system_prompt(gender=gender)}]
+        [{"role": "system", "content": build_system_prompt(gender=gender, exclude_ids=shown_item_ids)}]
         + _build_history(recent)
     )
     if synthetic_user_msg:
@@ -157,6 +162,8 @@ async def _stream_ai(
     match = _ITEM_MARKER_RE.search(full_content)
     if match:
         item_id = int(match.group(1))
+        if shown_item_ids is not None:
+            shown_item_ids.add(item_id)
         clean_text = _ITEM_MARKER_RE.sub("", full_content).rstrip()
         item = _load_item(item_id)
 
