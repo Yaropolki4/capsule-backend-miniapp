@@ -120,6 +120,10 @@ async def generate_and_send(
             caption=caption,
             reply_markup=rating_keyboard,
         )
+        await bot.send_message(
+            chat_id=telegram_id,
+            text="Готов подбирать вещи дальше — пиши, что ищешь 👇",
+        )
         logger.info("tid=%d outfit photo sent (%.1fs total)", telegram_id, time.monotonic() - t0)
 
     except Exception:
