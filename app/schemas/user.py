@@ -11,5 +11,6 @@ class UserOut(BaseModel):
     generations_left: int
     created_at: datetime
     gender: str | None
+    is_started_app: bool
 
     model_config = {"from_attributes": True}

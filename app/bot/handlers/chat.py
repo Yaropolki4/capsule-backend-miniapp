@@ -9,6 +9,7 @@ from aiogram import Bot, F, Router
 from aiogram.types import BufferedInputFile, InlineKeyboardButton, InlineKeyboardMarkup, Message
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.bot.generation import no_generations_message, open_app_keyboard
 from app.config import settings
 from app.crud.message import create_message, get_recent_messages, get_shown_item_ids
 from app.crud.user import get_user_by_telegram_id, set_pending_item_id, set_waiting_for_photo
@@ -88,7 +89,7 @@ async def run_ai_and_reply(
 
         if item:
             if clean_text:
-                await bot.send_message(chat_id, clean_text)
+                await bot.send_message(chat_id, clean_text, parse_mode="Markdown")
 
             try:
                 async with httpx.AsyncClient(timeout=30.0) as client:
@@ -133,7 +134,7 @@ async def run_ai_and_reply(
             return
 
     if full_content:
-        await bot.send_message(chat_id, full_content)
+        await bot.send_message(chat_id, full_content, parse_mode="Markdown")
         async with AsyncSessionFactory() as db:
             await create_message(db, user_id=user_id, type="ai", content=full_content, content_type="text")
 
@@ -153,7 +154,7 @@ async def handle_text(message: Message, db: AsyncSession, bot: Bot) -> None:
         logger.info("tid=%d text interrupted waiting_for_photo, routing to AI", tg_user.id)
 
     if user.generations_left <= 0:
-        await message.answer("Генерации закончились. Зайди в приложение, чтобы получить ещё.")
+        await message.answer(no_generations_message(user.is_started_app), reply_markup=open_app_keyboard())
         return
 
     shown_item_ids = await get_shown_item_ids(db, user.id)

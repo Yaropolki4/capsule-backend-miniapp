@@ -61,6 +61,14 @@ async def set_pending_item_id(db: AsyncSession, user: User, item_id: int | None)
     return user
 
 
+async def mark_app_started(db: AsyncSession, user: User) -> User:
+    user.is_started_app = True
+    user.generations_left += 1
+    await db.commit()
+    await db.refresh(user)
+    return user
+
+
 async def add_generations(db: AsyncSession, telegram_id: int, amount: int) -> User | None:
     user = await get_user_by_telegram_id(db, telegram_id)
     if not user:

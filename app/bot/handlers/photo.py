@@ -5,7 +5,7 @@ import httpx
 from aiogram import Bot, F, Router
 from aiogram.types import Message
 
-from app.bot.generation import default_item_for_gender, generate_and_send, get_item_by_id, open_app_keyboard
+from app.bot.generation import default_item_for_gender, generate_and_send, get_item_by_id, no_generations_message, open_app_keyboard
 from app.config import settings
 from app.crud.user import get_user_by_telegram_id, set_pending_item_id, set_waiting_for_photo
 from app.database import AsyncSessionFactory
@@ -44,10 +44,7 @@ async def handle_user_photo(message: Message, bot: Bot) -> None:
 
     if user.generations_left <= 0:
         logger.info("tid=%d no generations left", telegram_id)
-        await message.answer(
-            "Генерации закончились. Зайди в приложение, чтобы получить ещё.",
-            reply_markup=open_app_keyboard(),
-        )
+        await message.answer(no_generations_message(user.is_started_app), reply_markup=open_app_keyboard())
         return
 
     photo = message.photo[-1]

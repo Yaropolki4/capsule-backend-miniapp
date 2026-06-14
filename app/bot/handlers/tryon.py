@@ -5,7 +5,7 @@ from aiogram import Bot, F, Router
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.bot.generation import generate_and_send, get_item_by_id
+from app.bot.generation import generate_and_send, get_item_by_id, no_generations_message, open_app_keyboard
 from app.bot.handlers.chat import run_ai_and_reply
 from app.bot.handlers.start import SUGGESTIONS
 from app.bot.utils import get_profile_photos
@@ -33,7 +33,7 @@ async def handle_suggestion(callback: CallbackQuery, db: AsyncSession, bot: Bot)
         return
 
     if user.generations_left <= 0:
-        await callback.message.answer("Генерации закончились. Зайди в приложение, чтобы получить ещё.")
+        await callback.message.answer(no_generations_message(user.is_started_app), reply_markup=open_app_keyboard())
         return
 
     shown_item_ids = await get_shown_item_ids(db, user.id)
@@ -57,7 +57,7 @@ async def handle_cancel_rec(callback: CallbackQuery, db: AsyncSession, bot: Bot)
         return
 
     if user.generations_left <= 0:
-        await callback.message.answer("Генерации закончились. Зайди в приложение, чтобы получить ещё.")
+        await callback.message.answer(no_generations_message(user.is_started_app), reply_markup=open_app_keyboard())
         return
 
     shown_item_ids = await get_shown_item_ids(db, user.id)
@@ -87,7 +87,7 @@ async def handle_try_on(callback: CallbackQuery, db: AsyncSession, bot: Bot) -> 
         )
         return
 
-    all_photos = await get_profile_photos(bot, telegram_id, limit=5)
+    all_photos = await get_profile_photos(bot, telegram_id, limit=9)
     n = len(all_photos)
     logger.info("tid=%d try_on item_id=%d profile_photos=%d", telegram_id, item_id, n)
 
@@ -132,7 +132,7 @@ async def handle_try_on_profile_photo(callback: CallbackQuery, db: AsyncSession,
         return
 
     if user.generations_left <= 0:
-        await callback.message.answer("Генерации закончились. Зайди в приложение, чтобы получить ещё.")
+        await callback.message.answer(no_generations_message(user.is_started_app), reply_markup=open_app_keyboard())
         return
 
     item = get_item_by_id(item_id)

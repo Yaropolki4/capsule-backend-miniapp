@@ -21,6 +21,14 @@ DEFAULT_ITEM_ID_MALE = 5
 DEFAULT_ITEM_ID_FEMALE = 115
 
 
+def no_generations_message(is_started_app: bool) -> str:
+    if not is_started_app:
+        return (
+            "Генерации закончились. Открой приложение — тебя ждёт ещё одна бесплатная попытка! 🎁"
+        )
+    return "Генерации закончились. Зайди в приложение, чтобы получить ещё."
+
+
 def open_app_keyboard() -> InlineKeyboardMarkup | None:
     if not settings.miniapp_url:
         return None
@@ -95,7 +103,7 @@ async def generate_and_send(
             f"🎉 Твой образ готов!\n\n"
             f"Вещь: {item['title']}\n"
             f"Купить на WB: {item['link']}\n\n"
-            "Хочешь подобрать что-то своё? Открой приложение и попробуй AI-подбор!\n\n"
+            "AI-подбор гораздо удобнее в приложении — попробуй!\n\n"
             "Как тебе результат?"
         )
 
