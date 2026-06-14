@@ -15,10 +15,12 @@ from app.logging_config import setup_logging
 setup_logging()
 logger = logging.getLogger(__name__)
 
+from app.bot.handlers import chat as chat_handler
 from app.bot.handlers import payment as payment_handler
 from app.bot.handlers import photo as photo_handler
 from app.bot.handlers import rating as rating_handler
 from app.bot.handlers import start as start_handler
+from app.bot.handlers import tryon as tryon_handler
 from app.bot.middleware import DbSessionMiddleware
 from app.config import settings
 from app.database import AsyncSessionFactory, engine, Base
@@ -38,7 +40,9 @@ async def lifespan(app: FastAPI):
     dp.include_router(start_handler.router)
     dp.include_router(payment_handler.router)
     dp.include_router(rating_handler.router)
+    dp.include_router(tryon_handler.router)
     dp.include_router(photo_handler.router)
+    dp.include_router(chat_handler.router)
 
     await bot.delete_webhook(drop_pending_updates=True)
     polling_task = asyncio.create_task(

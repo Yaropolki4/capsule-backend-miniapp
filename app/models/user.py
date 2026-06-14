@@ -19,3 +19,4 @@ class User(Base):
     photos: Mapped[list | None] = mapped_column(JSONB, nullable=True)
     gender: Mapped[str | None] = mapped_column(String(16), nullable=True)
     waiting_for_photo: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default="false")
+    pending_item_id: Mapped[int | None] = mapped_column(Integer, nullable=True)

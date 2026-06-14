@@ -54,6 +54,13 @@ async def set_waiting_for_photo(db: AsyncSession, user: User, value: bool) -> Us
     return user
 
 
+async def set_pending_item_id(db: AsyncSession, user: User, item_id: int | None) -> User:
+    user.pending_item_id = item_id
+    await db.commit()
+    await db.refresh(user)
+    return user
+
+
 async def add_generations(db: AsyncSession, telegram_id: int, amount: int) -> User | None:
     user = await get_user_by_telegram_id(db, telegram_id)
     if not user:

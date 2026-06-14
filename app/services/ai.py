@@ -108,6 +108,13 @@ async def select_best_photo(photo_bytes_list: list[bytes], gender: str, api_key:
     return None
 
 
+async def complete_ai_response(messages: list[dict], api_key: str) -> str:
+    full = ""
+    async for chunk in stream_ai_response(messages, api_key):
+        full += chunk
+    return full
+
+
 async def stream_ai_response(
     messages: list[dict],
     api_key: str,
