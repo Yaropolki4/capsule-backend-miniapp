@@ -80,6 +80,7 @@ async def generate_try_on(
         logger.debug("OpenRouter response: %s", result)
 
     if not result.get("choices"):
+        logger.error("OpenRouter returned no choices: %s", result)
         return None
 
     message = result["choices"][0]["message"]
@@ -116,4 +117,5 @@ async def generate_try_on(
                     resp = await client.get(url)
                     return resp.content
 
+    logger.error("Could not extract image from OpenRouter response. message keys=%s content_type=%s", list(message.keys()), type(message.get("content")).__name__)
     return None
