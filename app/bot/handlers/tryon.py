@@ -2,7 +2,7 @@ import asyncio
 import logging
 
 from aiogram import Bot, F, Router
-from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import BufferedInputFile, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.bot.generation import generate_and_send, get_item_by_id, no_generations_message, open_app_keyboard
@@ -87,7 +87,7 @@ async def handle_try_on(callback: CallbackQuery, db: AsyncSession, bot: Bot) -> 
         )
         return
 
-    all_photos = await get_profile_photos(bot, telegram_id, limit=9)
+    all_photos = await get_profile_photos(bot, telegram_id, limit=5)
     n = len(all_photos)
     logger.info("tid=%d try_on item_id=%d profile_photos=%d", telegram_id, item_id, n)
 
@@ -98,6 +98,15 @@ async def handle_try_on(callback: CallbackQuery, db: AsyncSession, bot: Bot) -> 
             "Нет фото в профиле Telegram — пришли своё фото прямо в чат 📸"
         )
         return
+
+    media_group = [
+        InputMediaPhoto(
+            media=BufferedInputFile(photo_bytes, filename=f"photo_{i + 1}.jpg"),
+            caption=f"Фото {i + 1}",
+        )
+        for i, photo_bytes in enumerate(all_photos)
+    ]
+    await bot.send_media_group(chat_id=telegram_id, media=media_group)
 
     photo_buttons = [
         InlineKeyboardButton(text=f"Фото {i + 1}", callback_data=f"try_on:photo:{i}:{item_id}")
@@ -111,7 +120,7 @@ async def handle_try_on(callback: CallbackQuery, db: AsyncSession, bot: Bot) -> 
     keyboard = InlineKeyboardMarkup(inline_keyboard=rows)
 
     await callback.message.answer(
-        f"Нашёл {n} {'фото' if n == 1 else 'фото'} в профиле. Выбери, на каком примерим:",
+        "Выбери фото, на котором примерим образ:",
         reply_markup=keyboard,
     )
 

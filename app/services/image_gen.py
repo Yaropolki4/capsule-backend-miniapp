@@ -79,6 +79,10 @@ async def generate_try_on(
         result = response.json()
         logger.debug("OpenRouter response: %s", result)
 
+    if "error" in result:
+        logger.error("OpenRouter error response: %s", result["error"])
+        return None
+
     if not result.get("choices"):
         logger.error("OpenRouter returned no choices: %s", result)
         return None
