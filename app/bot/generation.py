@@ -4,7 +4,7 @@ import time
 from pathlib import Path
 
 from aiogram import Bot
-from aiogram.types import BufferedInputFile, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
+from aiogram.types import BufferedInputFile, InlineKeyboardButton, InlineKeyboardMarkup
 
 from app.config import settings
 from app.crud.outfit import create_outfit
@@ -21,20 +21,13 @@ DEFAULT_ITEM_ID_MALE = 5
 DEFAULT_ITEM_ID_FEMALE = 115
 
 
-def no_generations_message(is_started_app: bool) -> str:
-    if not is_started_app:
-        return (
-            "Генерации закончились. Открой приложение — тебя ждёт ещё одна бесплатная попытка! 🎁"
-        )
-    return "Генерации закончились. Зайди в приложение, чтобы получить ещё."
-
-
-def open_app_keyboard() -> InlineKeyboardMarkup | None:
-    if not settings.miniapp_url:
-        return None
-    return InlineKeyboardMarkup(inline_keyboard=[[
-        InlineKeyboardButton(text="🛍 Открыть Capsule", web_app=WebAppInfo(url=settings.miniapp_url))
-    ]])
+# Running out is the strongest moment to hand a user over to the site, so the message names what
+# is waiting there instead of sending them back for one more free try. The link itself comes from
+# `SiteCtaMiddleware`, which puts it under every reply.
+NO_GENERATIONS_MESSAGE = (
+    "Генерации в боте закончились. На сайте Capsule — полная версия стилиста: "
+    "свой гардероб, капсулы и примерки 👇"
+)
 
 
 def get_item_by_id(item_id: int) -> dict | None:
@@ -75,8 +68,7 @@ async def generate_and_send(
             logger.warning("tid=%d generation returned no bytes", telegram_id)
             await bot.send_message(
                 chat_id=telegram_id,
-                text="Не удалось создать образ. Попробуй ещё раз в приложении.",
-                reply_markup=open_app_keyboard(),
+                text="Не удалось создать образ. Попробуй ещё раз или собери его на сайте.",
             )
             return
 
@@ -103,24 +95,16 @@ async def generate_and_send(
             f"🎉 Твой образ готов!\n\n"
             f"Вещь: {item['title']}\n"
             f"Купить на WB: {item['link']}\n\n"
-            "AI-подбор гораздо удобнее в приложении — попробуй!\n\n"
             "Как тебе результат?"
         )
 
-        extra_row = []
-        if settings.miniapp_url:
-            extra_row = [InlineKeyboardButton(text="🛍 Открыть приложение", web_app=WebAppInfo(url=settings.miniapp_url))]
-
-        rating_keyboard = InlineKeyboardMarkup(inline_keyboard=[
-            [
-                InlineKeyboardButton(text="★", callback_data=f"rate:{outfit.id}:1"),
-                InlineKeyboardButton(text="★★", callback_data=f"rate:{outfit.id}:2"),
-                InlineKeyboardButton(text="★★★", callback_data=f"rate:{outfit.id}:3"),
-                InlineKeyboardButton(text="★★★★", callback_data=f"rate:{outfit.id}:4"),
-                InlineKeyboardButton(text="★★★★★", callback_data=f"rate:{outfit.id}:5"),
-            ],
-            *([extra_row] if extra_row else []),
-        ])
+        rating_keyboard = InlineKeyboardMarkup(inline_keyboard=[[
+            InlineKeyboardButton(text="★", callback_data=f"rate:{outfit.id}:1"),
+            InlineKeyboardButton(text="★★", callback_data=f"rate:{outfit.id}:2"),
+            InlineKeyboardButton(text="★★★", callback_data=f"rate:{outfit.id}:3"),
+            InlineKeyboardButton(text="★★★★", callback_data=f"rate:{outfit.id}:4"),
+            InlineKeyboardButton(text="★★★★★", callback_data=f"rate:{outfit.id}:5"),
+        ]])
 
         await bot.send_photo(
             chat_id=telegram_id,
@@ -139,8 +123,7 @@ async def generate_and_send(
         try:
             await bot.send_message(
                 chat_id=telegram_id,
-                text="Что-то пошло не так при создании образа. Попробуй в приложении.",
-                reply_markup=open_app_keyboard(),
+                text="Что-то пошло не так при создании образа. Попробуй ещё раз чуть позже.",
             )
         except Exception:
             pass

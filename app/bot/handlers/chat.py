@@ -9,7 +9,7 @@ from aiogram import Bot, F, Router
 from aiogram.types import BufferedInputFile, InlineKeyboardButton, InlineKeyboardMarkup, Message
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.bot.generation import no_generations_message, open_app_keyboard
+from app.bot.generation import NO_GENERATIONS_MESSAGE
 from app.config import settings
 from app.crud.message import create_message, get_recent_messages, get_shown_item_ids
 from app.crud.user import get_user_by_telegram_id, set_pending_item_id, set_waiting_for_photo
@@ -154,7 +154,7 @@ async def handle_text(message: Message, db: AsyncSession, bot: Bot) -> None:
         logger.info("tid=%d text interrupted waiting_for_photo, routing to AI", tg_user.id)
 
     if user.generations_left <= 0:
-        await message.answer(no_generations_message(user.is_started_app), reply_markup=open_app_keyboard())
+        await message.answer(NO_GENERATIONS_MESSAGE)
         return
 
     shown_item_ids = await get_shown_item_ids(db, user.id)

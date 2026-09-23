@@ -6,6 +6,7 @@ from aiogram import Router, F
 from aiogram.types import CallbackQuery
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.bot.site_cta import site_cta_keyboard
 from app.config import settings
 from app.crud.outfit import rate_outfit
 from app.crud.user import get_user_by_telegram_id
@@ -42,7 +43,9 @@ async def handle_rate_callback(callback: CallbackQuery, db: AsyncSession):
     await callback.answer(f"Спасибо! {STARS[stars]}", show_alert=False)
 
     try:
-        await callback.message.edit_reply_markup(reply_markup=None)
+        # The stars are spent, but the message keeps the way to the site: an edit rebuilds the
+        # keyboard from scratch and the outgoing middleware only touches sends, not edits.
+        await callback.message.edit_reply_markup(reply_markup=site_cta_keyboard())
     except Exception:
         pass
 

@@ -12,6 +12,9 @@ class Settings(BaseSettings):
     s3_region: str = "ru-central1"
     s3_public_url: str | None = None
     miniapp_url: str | None = None
+    # The full product the bot funnels into. Hardcoded so that no deploy has to be configured
+    # for it; `SITE_URL` still overrides it, and an empty value drops the button altogether.
+    site_url: str = "https://platform.capsule-ai.ru/"
     environment: str = "development"
     image_model: str = "x-ai/grok-imagine-image-quality"
     admin_chat_id: str = "@Yaropolkpisarev"

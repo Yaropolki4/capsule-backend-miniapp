@@ -5,7 +5,7 @@ import httpx
 from aiogram import Bot, F, Router
 from aiogram.types import Message
 
-from app.bot.generation import default_item_for_gender, generate_and_send, get_item_by_id, no_generations_message, open_app_keyboard
+from app.bot.generation import NO_GENERATIONS_MESSAGE, default_item_for_gender, generate_and_send, get_item_by_id
 from app.config import settings
 from app.crud.user import get_user_by_telegram_id, set_pending_item_id, set_waiting_for_photo
 from app.database import AsyncSessionFactory
@@ -44,7 +44,7 @@ async def handle_user_photo(message: Message, bot: Bot) -> None:
 
     if user.generations_left <= 0:
         logger.info("tid=%d no generations left", telegram_id)
-        await message.answer(no_generations_message(user.is_started_app), reply_markup=open_app_keyboard())
+        await message.answer(NO_GENERATIONS_MESSAGE)
         return
 
     photo = message.photo[-1]
@@ -85,8 +85,7 @@ async def handle_user_photo(message: Message, bot: Bot) -> None:
     if not item:
         logger.error("tid=%d item not found pending_item_id=%s", telegram_id, pending_item_id)
         await message.answer(
-            "Не удалось найти подходящий образ. Зайди в приложение!",
-            reply_markup=open_app_keyboard(),
+            "Не удалось найти подходящий образ. Опиши, что ищешь, другими словами."
         )
         return
 

@@ -5,7 +5,6 @@ from aiogram.filters import CommandStart
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.bot.generation import open_app_keyboard
 from app.crud.user import get_or_create_user, set_user_gender
 from app.services.ai import infer_gender_from_name
 from app.config import settings
@@ -55,6 +54,5 @@ async def handle_start(message: Message, db: AsyncSession):
     else:
         await message.answer(
             f"С возвращением, {tg_user.first_name}!\n"
-            f"У тебя осталось {user.generations_left} генераций.",
-            reply_markup=open_app_keyboard(),
+            f"У тебя осталось {user.generations_left} генераций."
         )

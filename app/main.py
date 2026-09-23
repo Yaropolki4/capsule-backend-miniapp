@@ -21,7 +21,7 @@ from app.bot.handlers import photo as photo_handler
 from app.bot.handlers import rating as rating_handler
 from app.bot.handlers import start as start_handler
 from app.bot.handlers import tryon as tryon_handler
-from app.bot.middleware import DbSessionMiddleware
+from app.bot.middleware import DbSessionMiddleware, SiteCtaMiddleware
 from app.config import settings
 from app.database import AsyncSessionFactory, engine, Base
 from app.routers import auth, messages, payments, users, ws, generate, feedback, media
@@ -35,6 +35,8 @@ async def lifespan(app: FastAPI):
 
     bot = Bot(token=settings.bot_token)
     dp = Dispatcher()
+
+    bot.session.middleware(SiteCtaMiddleware())
 
     dp.update.middleware(DbSessionMiddleware(AsyncSessionFactory))
     dp.include_router(start_handler.router)
